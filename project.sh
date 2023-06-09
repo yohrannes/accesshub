@@ -2,7 +2,7 @@
 
 declare -A DADOS
 
-DADOS[nidforusr1]='server1' # DADOS GRUPO FOR
+DADOS[nidforusr1]='' # DADOS GRUPO FOR
 DADOS[nidforusr2]=''
 DADOS[nidforusr3]=''
 DADOS[nidforusr4]=''
@@ -77,11 +77,19 @@ LOG=/var/log/acesssos.log
 
 function menuprincipal {
 clear
-echo '==============='
-echo "[1] Acessar usernodes." 
-echo "[2] Acessar infranodes."
-echo "[3] Acessar backupnodes."
-echo "[s] Sair."
+echo '
+==============================================
+    ____ ____ ____ ____ ____ _  _ _  _ ___  
+    |__| |    |___ [__  [__  |__| |  | |__] 
+    |  | |___ |___ ___] ___] |  | |__| |__] 
+                                            
+=============================================='
+echo ""
+echo "[1] Acesss usernodes." 
+echo "[2] Acesss infranodes."
+echo "[3] Acesss backupnodes."
+echo "[4] New node."
+echo "[s] Exit."
 echo ''
 echo ''
 echo ''
@@ -339,6 +347,10 @@ while [ "$contload" -lt 20 ]; do
         clear
     done
 done
+}
+
+function cadastrar {
+    read -p "Digite o nome do node: " nid
 }
 
 menuprincipal
