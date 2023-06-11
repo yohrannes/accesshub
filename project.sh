@@ -2,78 +2,74 @@
 
 declare -A DADOS
 
-DADOS[nidforusr1]='' # DADOS GRUPO FOR
+## VARIABLES FOR TEST
+TESTPASSWORD=
+TESTHOST=
+########################
+
+DADOS[nidcampusr1]='server user camp1' # CAMP
+DADOS[nidcampusr2]='server user camp2'
+DADOS[nidcampusr3]=''
+DADOS[nidcampusr4]=''
+DADOS[nidcampusr5]=''
+DADOS[pwcampusr1]=$TESTPASSWORD
+DADOS[pwcampusr2]=''
+DADOS[pwcampusr3]=''
+DADOS[pwcampusr4]=''
+DADOS[pwcampusr5]=''
+DADOS[ipcampusr1]=$TESTHOST
+DADOS[ipcampusr2]=''
+DADOS[ipcampusr3]=''
+DADOS[ipcampusr4]=''
+DADOS[ipcampusr5]=''
+
+DADOS[nidcampbkp1]='server user camp backup1' # CAMP SUBGRUPO BACKUP
+DADOS[nidcampbkp2]=''
+DADOS[nidcampbkp3]=''
+DADOS[pwcampbkp1]=$TESTPASSWORD
+DADOS[pwcampbkp2]=''
+DADOS[pwcampbkp3]=''
+DADOS[ipcampbkp1]=$TESTHOST
+DADOS[ipcampbkp2]=''
+DADOS[ipcampbkp3]=''
+
+DADOS[nidforusr1]='server user for1' # FOR
 DADOS[nidforusr2]=''
 DADOS[nidforusr3]=''
 DADOS[nidforusr4]=''
 DADOS[nidforusr5]=''
-
-DADOS[pwforusr1]=''
+DADOS[pwforusr1]=$TESTPASSWORD
 DADOS[pwforusr2]=''
 DADOS[pwforusr3]=''
 DADOS[pwforusr4]=''
 DADOS[pwforusr5]=''
-
-DADOS[ipforusr1]=''
+DADOS[ipforusr1]=$TESTHOST
 DADOS[ipforusr2]=''
 DADOS[ipforusr3]=''
 DADOS[ipforusr4]=''
 DADOS[ipforusr5]=''
 
-DADOS[nidforbkp1]='' # DADOS GRUPO FOR SUBGRUPO BACKUP
-
-DADOS[pwforbkp1]=''
-
-DADOS[ipforbkp1]=''
-
-DADOS[nidcampusr3]='' # DADOS GRUPO CAMP
-DADOS[nidcampusr4]=''
-DADOS[nidcampusr5]=''
-DADOS[nidcampusr6]=''
-DADOS[nidcampusr7]=''
-
-DADOS[pwcampusr3]=''
-DADOS[pwcampusr4]=''
-DADOS[pwcampusr5]=''
-DADOS[pwcampusr6]=''
-DADOS[pwcampusr7]=''
-
-DADOS[ipcampusr3]=''
-DADOS[ipcampusr4]=''
-DADOS[ipcampusr5]=''
-DADOS[ipcampusr6]=''
-DADOS[ipcampusr7]=''
-
-DADOS[nidcampbkp3]='' # DADOS GRUPO CAMP SUBGRUPO BACKUP
-DADOS[nidcampbkp1]=''
-DADOS[nidcampbkp2]=''
-
-DADOS[pwcampbkp3]=''
-DADOS[pwcampbkp1]=''
-DADOS[pwcampbkp2]=''
-
-DADOS[ipcampbkp3]=''
-DADOS[ipcampbkp1]=''
-DADOS[ipcampbkp2]=''
-
-DADOS[nidinfusr2]='' # DADOS GRUPO INF
-DADOS[nidinfusr3]=''
-
-DADOS[pwinf2]=''
-DADOS[pwinf3]=''
-
-DADOS[ipinf2]=''
-DADOS[ipinf3]=''
+DADOS[nidforbkp1]='server user for backup1' # FOR SUBGRUPO BACKUP
+DADOS[pwforbkp1]=$TESTPASSWORD
+DADOS[ipforbkp1]=$TESTHOST
 
 USER='root'
 
-REG=(
+REGIONS=( ## Suposed to be the Country...
 'Campinas'
 'Fortaleza'
 )
 
-data=`/bin/date +%d-%m-%Y-%H-%M`
-LOG=/var/log/acesssos.log
+SUBREGIONS=( ## Suposed to be the State....
+    ''
+)
+
+SERVERTYPE=(
+    'Server'
+    'Backup'
+)
+
+echo Script started in "$(date)" >> /var/log/accesshub.log from user "$(whoami)"
 
 function menuprincipal {
 clear
@@ -85,10 +81,9 @@ echo '
                                             
 =============================================='
 echo ""
-echo "[1] Acesss usernodes." 
-echo "[2] Acesss infranodes."
-echo "[3] Acesss backupnodes."
-echo "[4] New node."
+echo "[1] Access Server User" 
+echo "[2] Access Server Backup."
+echo "[3] New server."
 echo "[s] Exit."
 echo ''
 echo ''
@@ -96,12 +91,12 @@ echo ''
 echo ''
 echo ''
 echo ''
-read -p "Digite a opção desejada: " OP
+read -p "Enter the desired option: " OP
 
 case ${OP} in
 1) menuregiao;;
-2) acessarinfranodes;;
-3) menuregiao;;
+2) menuregiao;;
+3) newserver;;
 s) exit;;
 *)
     clear
@@ -111,13 +106,27 @@ s) exit;;
 esac
 }
 
+function newserver {
+    clear
+    echo "Enter the server access data......"
+    echo ''
+    read -p "Name: " id
+    read -p "User: " user
+    read -p "Password: " pw
+    read -p "Host: " host
+    read -p "Port: " port
+    read -p "Server type-group: " type
+    read -p "Server region-group: " reggp
+    read -p "Server sub-region group: " sbreggp
+}
+
 function menuregiao {
 clear
-echo 'Regiões disponíveis'
+echo 'Disponible Regions.'
 echo '---------------------'
-for ((i=0; i<${#REG[@]}; i++));
+for ((i=0; i<${#REGIONS[@]}; i++));
 do
-    echo "[$i]${REG[i]}"
+    echo "[$i]${REGIONS[i]}"
 done
 read -p "Digite a região que deseja acessar (0,1,2,3....), v para voltar:" OPREGUND
 case ${OPREGUND} in
@@ -126,7 +135,7 @@ case ${OPREGUND} in
     then
     acessarusernodes
     fi
-    if [[ $OP == 3 ]]
+    if [[ $OP == 2 ]]
     then
     acessarbackupnodes
     fi
@@ -136,7 +145,7 @@ case ${OPREGUND} in
     then
     acessarusernodes
     fi
-    if [[ $OP == 3 ]]
+    if [[ $OP == 2 ]]
     then
     acessarbackupnodes
     fi
@@ -158,6 +167,16 @@ acessarusernodes=0
 while [ "$acessarusernodes" != 1 ];do
 case $OPREGUND in
 0)
+    clear
+    echo "Usernodes disponíveis."
+    echo "-----------------------------"
+    for data in ${!DADOS[@]}
+    do
+        if [[ "$data" == "nidcampusr"* ]] ## Deveria ser nidusrcamp nessa ordem
+        then
+            echo ${DADOS[$data]}
+        fi
+    done
     echo ''
 	read -p "Digite o número do usernode que deseja logar (0,1...), v para voltar: " OPLOGUSRCAMP
     echo '----------------------------------------------------------------------------'
@@ -183,6 +202,16 @@ case $OPREGUND in
     esac
 ;;
 1)
+    clear
+    echo "Usernodes disponíveis."
+    echo "-----------------------------"
+    for data in ${!DADOS[@]}
+    do
+        if [[ "$data" == "nidforusr"* ]] ## Deveria ser nidusrcamp nessa ordem
+        then
+            echo ${DADOS[$data]}
+        fi
+    done
     echo ''
 	read -p "Digite o número do usernode que deseja logar (0,1...), v para voltar: " OPLOGUSRFOR
     echo '----------------------------------------------------------------------------'
@@ -212,45 +241,6 @@ acessarusernodes
 loading
 ;;
 esac
-done
-}
-
-function acessarinfranodes {
-acessarinfranodes=0
-while [ "$acessarinfranodes" != 1 ];do
-clear
-echo "Infrandoes disponíveis."
-echo "-----------------------------"
-for data in ${!DADOS[@]}
-do
-    if [[ "$data" == "nidinf"* ]]
-    then
-        echo ${DADOS[$data]}
-    fi
-done
-echo ''
-read -p "Digite o número do infranode que deseja logar (0,1...), v para voltar: " OPLOGINFCAMP
-echo '----------------------------------------------------------------------------'
-case $OPLOGINFCAMP in
-v) menuprincipal;;
-*)
-for data in ${!DADOS[@]}
-do
-    if [[ "$data" == "nidinf"$OPLOGINFCAMP ]]
-    then
-        clear
-        echo ...
-        echo ACESSANDO
-        echo ...
-        pwdata=pwinfusr${OPLOGINFCAMP}
-        ipdata=ipinfusr${OPLOGINFCAMP}
-        sshpass -p "${DADOS[$pwdata]}" ssh "$USER"@"${DADOS[$ipdata]}"
-    fi
-done
-;;
-esac
-loading
-acessarinfranodes
 done
 }
 
@@ -347,10 +337,6 @@ while [ "$contload" -lt 20 ]; do
         clear
     done
 done
-}
-
-function cadastrar {
-    read -p "Digite o nome do node: " nid
 }
 
 menuprincipal
