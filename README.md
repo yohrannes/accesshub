@@ -1,3 +1,7 @@
-# cloud-management
-Project in shell-script who consists in access and manage multiple linux servers in a private network.
-***
+# AcessHub
+Register and access multiple linux host's in a public or a private network!!
+
+If you are a guy who want to register and multiple host's in different regions with a easy and fast way just from linux terminal, that's the program who will help you.
+
+That's good for cloud-provider or anyone busines who have too many servers, and want do access all of then with just one server.
+
