@@ -1,7 +1,12 @@
 # AcessHub
-Register and access multiple linux host's in a public or a private network!!
 
-If you are a guy who want to register and multiple host's in different regions with a easy and fast way just from linux terminal, that's the program who will help you.
+* Access multiple linux host's in a public or a private network!!
+* Save several clicks accessing your servers by only one script than browsing different layouts of different platforms.
+* Register all your host servers in just one shell file with no interaction of any other service outside of the host.
+* Designed for all of type of business who have too many linux host's to manage.
+* Organize all of them with server type's and region.
+* Use password or private ssh key's do access.
+* All with easy usability and security.
 
-That's good for cloud-provider or anyone busines who have too many servers, and want do access all of then with just one server.
+
 
