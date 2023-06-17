@@ -5,7 +5,7 @@
 * Register all your host servers in just one shell file with no interaction of any other service outside of the host.
 * Designed for all of type of business who have too many linux host's to manage.
 * Organize all of them with server type's and region.
-* Use password or private ssh key's do access.
+* Use password or private ssh key's to access.
 * All with easy usability and security.
 
 
