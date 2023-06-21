@@ -1,44 +1,43 @@
 #!/bin/bash
-
-declare -A DATA
-
-DATA[sid0]='aaaa'
-DATA[sid1]='bbbb'
-DATA[sid2]='cccc'
-
+. data.sh
 function newserver {
-# sid = Server Name
-# sidcont = Server Name ID counter
-# 
-sidtotal=0
-indexcount=0
-for indexcount in "${!DATA[@]}"
-do
-    if [[ $indexcount == sid* ]]
-    then
-        echo 'DATA[sid'${sidtotal}']='${DATA[sid$sidtotal]}
-        sidtotal=$((sidtotal+1))
+while true; do
+    # sid = Server Name
+    # sidcont = Server Name ID counter
+    # 
+
+    sidtotal=0
+    indexcount=0
+
+    for indexcount in "${!DATA[@]}"
+    do
+        if [[ $indexcount == sid* ]]
+        then
+            sidtotal=$((sidtotal+1))
+        fi
+    done
+
+    read -r -p "Name: " id
+
+    # Add the id value array on desired index
+    
+    DATA["sid$((sidtotal))"]=$id  
+
+    echo "DATA[sid"$sidtotal"]='"$id"'" >> data.sh
+
+    #Made a way to show DATA[sidtotal] = id
+
+    echo ${DATA[@]}
+    echo ${!DATA[@]}
+
+    read -r -p "Would like do add more data? [y - n]" MOREDATA
+
+    if [ "$MOREDATA" == y ]; then
+        newserver
+    else
+        break
     fi
 done
-
-read -p "Name: " id
-
-# Add the id value array on desired index
-echo $sidtotal
-DATA["sid$sidtotal"]=$id
-
-# read -p "Wold like do add more data?" MOREDATA
-
-for indexcount in "${!DATA[@]}"
-do
-    if [[ $indexcount == sid* ]]
-    then
-        echo 'DATA[sid'${sidtotal}']='${DATA[sid$sidtotal]}
-    fi
-done
-
-
 }
-newserver
 
-echo 'sidtotal: '${sidtotal}
+newserver
