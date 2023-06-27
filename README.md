@@ -1,6 +1,6 @@
 # AcessHub
 
-![Githubzinho do Yohrannes](https://github.com/yohrannes/git-github-estudo/assets/51239326/2cab0942-7060-4deb-b8ad-45a8dc008e5b)
+![Logo](https://raw.githubusercontent.com/yohrannes/cloud-management/main/logo/logo.png)
 
 * Access multiple linux host's in a public or a private network!!
 * Save several clicks accessing your servers by only one script than browsing different layouts of different platforms.
