@@ -16,24 +16,15 @@ while true; do
             sidtotal=$((sidtotal+1))
         fi
     done
-
     read -r -p "Name: " id
 
     # Add the id value array on desired index
-    
-    DATA["sid$((sidtotal))"]=$id  
-
+    DATA["sid$((sidtotal))"]=$id
     echo "DATA[sid"$sidtotal"]='"$id"'" >> data.sh
-
-    #Made a way to show DATA[sidtotal] = id
-
-    echo ${DATA[@]}
-    echo ${!DATA[@]}
-
     read -r -p "Would like do add more data? [y - n]" MOREDATA
 
     if [ "$MOREDATA" == y ]; then
-        newserver
+        continue
     else
         break
     fi
