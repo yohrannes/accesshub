@@ -21,7 +21,12 @@ while true; do
     # Add the id value array on desired index
     DATA["sid$((sidtotal))"]=$id
     echo "DATA[sid"$sidtotal"]='"$id"'" >> data.sh
+    
+    echo "DATA[sid"$sidtotal"]='"$id"'"
     read -r -p "Would like do add more data? [y - n]" MOREDATA
+
+    # Add the index of the next value
+    sidtotal=$((sidtotal+1))
 
     if [ "$MOREDATA" == y ]; then
         continue
