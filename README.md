@@ -1,8 +1,4 @@
-<center>
-
-#Access Hub
-
-</center>
+# AccessHub
 
 * Access multiple linux host's in a public or a private network.
 * Save several clicks accessing your servers by only one script than browsing different layouts of different platforms.
