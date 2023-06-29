@@ -8,11 +8,11 @@
 * Use password or private ssh key's to access.
 * All with easy usability and security.
 
-# Requirements
+## Requirements
 - [x] sshpass installed.
 - [x] allow permissions to access from ssh password or private key on the others servers.
 - [x] when you will add a new server, be certified who no one are using the script at the same time.
 
-# How to use
+## How to use
 ...
 
