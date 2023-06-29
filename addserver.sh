@@ -1,12 +1,15 @@
 #!/bin/bash
-. data.sh
+source .accessdata
+source .regiondata
+
 function newserver {
 while true; do
     # sid = Server Name
-    # sidcont = Server Name ID counter
-    # 
+    # rid = Region Name
 
     sidtotal=0
+    ridtotal=0
+
     indexcount=0
 
     for indexcount in "${!DATA[@]}"
@@ -16,21 +19,44 @@ while true; do
             sidtotal=$((sidtotal+1))
         fi
     done
+
+    # Find index out of order
+    for ((i=0; i<=sidtotal; i++))
+    do
+        index="sid$i"
+        if [[ ! ${DATA[$index]} ]]
+        then
+            order_status=1
+            break
+        fi
+        order_status=0
+    done
+
+    # Find the value on the next disponible index
+    if [[ $order_status == 1 ]]
+    then
+        for ((i=0; i<=sidtotal+1; i++))
+        do
+            index="sid$i"
+            if [[ ! ${DATA[$index]} ]]
+            then
+                sidtotal=$i
+                break
+            fi
+        done
+    else
+        sidtotal=$((sidtotal+1))
+    fi
+
     read -r -p "Name: " id
 
-    # Add the id value array on desired index
-    DATA["sid$((sidtotal))"]=$id
-    echo "DATA[sid"$sidtotal"]='"$id"'" >> data.sh
-    
-    echo "DATA[sid"$sidtotal"]='"$id"'"
-    read -r -p "Would like do add more data? [y - n]" MOREDATA
+    # Add the id value array on the next disponible index
+    DATA["sid$sidtotal"]=$id
+    echo "DATA[sid$sidtotal]='$id'" >> .accessdata
 
-    # Add the index of the next value
-    sidtotal=$((sidtotal+1))
+    read -r -p "Would you like to add more data? [y/n]: " MOREDATA
 
-    if [ "$MOREDATA" == y ]; then
-        continue
-    else
+    if [[ $MOREDATA != [yY] ]]; then
         break
     fi
 done

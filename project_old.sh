@@ -1,5 +1,59 @@
 #!/bin/bash
-source .accessdata
+
+declare -A DADOS
+
+## VARIABLES FOR TEST
+TESTPASSWORD=
+TESTHOST=
+########################
+
+DADOS[nidcampusr1]='server user camp1' # CAMP
+DADOS[nidcampusr2]='server user camp2'
+DADOS[nidcampusr3]=''
+DADOS[nidcampusr4]=''
+DADOS[nidcampusr5]=''
+DADOS[pwcampusr1]=$TESTPASSWORD
+DADOS[pwcampusr2]=''
+DADOS[pwcampusr3]=''
+DADOS[pwcampusr4]=''
+DADOS[pwcampusr5]=''
+DADOS[ipcampusr1]=$TESTHOST
+DADOS[ipcampusr2]=''
+DADOS[ipcampusr3]=''
+DADOS[ipcampusr4]=''
+DADOS[ipcampusr5]=''
+
+DADOS[nidcampbkp1]='server user camp backup1' # CAMP SUBGRUPO BACKUP
+DADOS[nidcampbkp2]=''
+DADOS[nidcampbkp3]=''
+DADOS[pwcampbkp1]=$TESTPASSWORD
+DADOS[pwcampbkp2]=''
+DADOS[pwcampbkp3]=''
+DADOS[ipcampbkp1]=$TESTHOST
+DADOS[ipcampbkp2]=''
+DADOS[ipcampbkp3]=''
+
+DADOS[nidforusr1]='server user for1' # FOR
+DADOS[nidforusr2]=''
+DADOS[nidforusr3]=''
+DADOS[nidforusr4]=''
+DADOS[nidforusr5]=''
+DADOS[pwforusr1]=$TESTPASSWORD
+DADOS[pwforusr2]=''
+DADOS[pwforusr3]=''
+DADOS[pwforusr4]=''
+DADOS[pwforusr5]=''
+DADOS[ipforusr1]=$TESTHOST
+DADOS[ipforusr2]=''
+DADOS[ipforusr3]=''
+DADOS[ipforusr4]=''
+DADOS[ipforusr5]=''
+
+DADOS[nidforbkp1]='server user for backup1' # FOR SUBGRUPO BACKUP
+DADOS[pwforbkp1]=$TESTPASSWORD
+DADOS[ipforbkp1]=$TESTHOST
+
+USER='root'
 
 REGIONS=( ## Suposed to be the Country...
 'Campinas'
@@ -116,11 +170,11 @@ case $OPREGUND in
     clear
     echo "Usernodes disponíveis."
     echo "-----------------------------"
-    for data in ${!DATA[@]}
+    for data in ${!DADOS[@]}
     do
         if [[ "$data" == "nidcampusr"* ]] ## Deveria ser nidusrcamp nessa ordem
         then
-            echo ${DATA[$data]}
+            echo ${DADOS[$data]}
         fi
     done
     echo ''
@@ -133,13 +187,13 @@ case $OPREGUND in
 	echo ...
 	echo ACESSANDO
 	echo ...
-    for data in ${!DATA[@]}
+    for data in ${!DADOS[@]}
     do
         if [[ "$data" == "nidcampusr"$OPLOGUSRCAMP ]]
         then
             pwdata=pwcampusr${OPLOGUSRCAMP}
             ipdata=ipcampusr${OPLOGUSRCAMP}
-            sshpass -p "${DATA[$pwdata]}" ssh "$USER"@"${DATA[$ipdata]}" 
+            sshpass -p "${DADOS[$pwdata]}" ssh "$USER"@"${DADOS[$ipdata]}"
             clear
             acessarusernodes
         fi
@@ -151,11 +205,11 @@ case $OPREGUND in
     clear
     echo "Usernodes disponíveis."
     echo "-----------------------------"
-    for data in ${!DATA[@]}
+    for data in ${!DADOS[@]}
     do
-        if [[ "$data" == "nidforusr"* ]]
+        if [[ "$data" == "nidforusr"* ]] ## Deveria ser nidusrcamp nessa ordem
         then
-            echo ${DATA[$data]}
+            echo ${DADOS[$data]}
         fi
     done
     echo ''
@@ -168,13 +222,13 @@ case $OPREGUND in
 	echo ...
 	echo ACESSANDO
 	echo ...
-    for data in ${!DATA[@]}
+    for data in ${!DADOS[@]}
     do
         if [[ "$data" == "nidforusr"$OPLOGUSRFOR ]]
         then
             pwdata=pwforusr${OPLOGUSRFOR}
             ipdata=ipforusr${OPLOGUSRFOR}
-            sshpass -p "${DATA[$pwdata]}" ssh "$USER"@"${DATA[$ipdata]}"
+            sshpass -p "${DADOS[$pwdata]}" ssh "$USER"@"${DADOS[$ipdata]}"
             clear
             acessarusernodes
         fi
@@ -198,11 +252,11 @@ case $OPREGUND in
     clear
     echo "Backupnodes disponíveis."
     echo "-----------------------------"
-    for data in ${!DATA[@]}
+    for data in ${!DADOS[@]}
     do
         if [[ "$data" == "nidcampbkp"* ]]
         then
-            echo ${data#nidcampbkp}:${DATA[$data]}
+            echo ${data#nidcampbkp}:${DADOS[$data]}
         fi
     done
     echo ''
@@ -215,13 +269,13 @@ case $OPREGUND in
 	echo ...
 	echo ACESSANDO
 	echo ...
-    for data in ${!DATA[@]}
+    for data in ${!DADOS[@]}
     do
         if [[ "$data" == "nidcampbkp"$OPLOGBKPCAMP ]]
         then
             pwdata=pwcampbkp${OPLOGBKPCAMP}
             ipdata=ipcampbkp${OPLOGBKPCAMP}
-            sshpass -p "${DATA[$pwdata]}" ssh "$USER"@"${DATA[$ipdata]}"
+            sshpass -p "${DADOS[$pwdata]}" ssh "$USER"@"${DADOS[$ipdata]}"
             clear
             acessarbackupnodes
         fi
@@ -233,11 +287,11 @@ case $OPREGUND in
     clear
     echo "Backupnodes disponíveis."
     echo "-----------------------------"
-    for data in ${!DATA[@]}
+    for data in ${!DADOS[@]}
     do
         if [[ "$data" == "nidforbkp"* ]]
         then
-            echo ${data#nidforbkp}:${DATA[$data]}
+            echo ${data#nidforbkp}:${DADOS[$data]}
         fi
     done
     echo ''
@@ -250,13 +304,13 @@ case $OPREGUND in
 	echo ...
 	echo ACESSANDO
 	echo ...
-    for data in ${!DATA[@]}
+    for data in ${!DADOS[@]}
     do
         if [[ "$data" == "nidforbkp"$OPLOGBKPFOR ]]
         then
             pwdata=pwforbkp${OPLOGBKPFOR}
             ipdata=ipforbkp${OPLOGBKPFOR}
-            sshpass -p "${DATA[$pwdata]}" ssh "$USER"@"${DATA[$ipdata]}"
+            sshpass -p "${DADOS[$pwdata]}" ssh "$USER"@"${DADOS[$ipdata]}"
             clear
             acessarbackupnodes
         fi
