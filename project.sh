@@ -1,5 +1,7 @@
 #!/bin/bash
 source .accessdata
+source .regiondata
+source .userdata
 
 REGIONS=( ## Suposed to be the Country...
 'Campinas'
@@ -118,7 +120,7 @@ case $OPREGUND in
     echo "-----------------------------"
     for data in ${!DATA[@]}
     do
-        if [[ "$data" == "nidcampusr"* ]] ## Deveria ser nidusrcamp nessa ordem
+        if [[ "$data" == "sidcampusr"* ]]
         then
             echo ${DATA[$data]}
         fi
@@ -135,7 +137,7 @@ case $OPREGUND in
 	echo ...
     for data in ${!DATA[@]}
     do
-        if [[ "$data" == "nidcampusr"$OPLOGUSRCAMP ]]
+        if [[ "$data" == "sidcampusr"$OPLOGUSRCAMP ]]
         then
             pwdata=pwcampusr${OPLOGUSRCAMP}
             ipdata=ipcampusr${OPLOGUSRCAMP}
@@ -153,7 +155,7 @@ case $OPREGUND in
     echo "-----------------------------"
     for data in ${!DATA[@]}
     do
-        if [[ "$data" == "nidforusr"* ]]
+        if [[ "$data" == "sidforusr"* ]]
         then
             echo ${DATA[$data]}
         fi
@@ -170,7 +172,7 @@ case $OPREGUND in
 	echo ...
     for data in ${!DATA[@]}
     do
-        if [[ "$data" == "nidforusr"$OPLOGUSRFOR ]]
+        if [[ "$data" == "sidforusr"$OPLOGUSRFOR ]]
         then
             pwdata=pwforusr${OPLOGUSRFOR}
             ipdata=ipforusr${OPLOGUSRFOR}
@@ -200,9 +202,9 @@ case $OPREGUND in
     echo "-----------------------------"
     for data in ${!DATA[@]}
     do
-        if [[ "$data" == "nidcampbkp"* ]]
+        if [[ "$data" == "sidcampbkp"* ]]
         then
-            echo ${data#nidcampbkp}:${DATA[$data]}
+            echo ${data#sidcampbkp}:${DATA[$data]}
         fi
     done
     echo ''
@@ -217,7 +219,7 @@ case $OPREGUND in
 	echo ...
     for data in ${!DATA[@]}
     do
-        if [[ "$data" == "nidcampbkp"$OPLOGBKPCAMP ]]
+        if [[ "$data" == "sidcampbkp"$OPLOGBKPCAMP ]]
         then
             pwdata=pwcampbkp${OPLOGBKPCAMP}
             ipdata=ipcampbkp${OPLOGBKPCAMP}
@@ -235,9 +237,9 @@ case $OPREGUND in
     echo "-----------------------------"
     for data in ${!DATA[@]}
     do
-        if [[ "$data" == "nidforbkp"* ]]
+        if [[ "$data" == "sidforbkp"* ]]
         then
-            echo ${data#nidforbkp}:${DATA[$data]}
+            echo ${data#sidforbkp}:${DATA[$data]}
         fi
     done
     echo ''
@@ -252,7 +254,7 @@ case $OPREGUND in
 	echo ...
     for data in ${!DATA[@]}
     do
-        if [[ "$data" == "nidforbkp"$OPLOGBKPFOR ]]
+        if [[ "$data" == "sidforbkp"$OPLOGBKPFOR ]]
         then
             pwdata=pwforbkp${OPLOGBKPFOR}
             ipdata=ipforbkp${OPLOGBKPFOR}
