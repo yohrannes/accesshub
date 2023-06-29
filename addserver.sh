@@ -1,14 +1,16 @@
 #!/bin/bash
 source .accessdata
-source .regiondata
+source .userdata
 
 function newserver {
 while true; do
-    # sid = Server Name
-    # rid = Region Name
+    # sid = Server name
+    # uid = Server user
+    # pid = Server password
 
     sidtotal=0
-    ridtotal=0
+    uidtotal=0
+    pidtotal=0
 
     indexcount=0
 
@@ -18,27 +20,44 @@ while true; do
         then
             sidtotal=$((sidtotal+1))
         fi
+        if [[ $indexcount == uid* ]]
+        then
+            uidtotal=$((uidtotal+1))
+        fi
     done
 
     # Find index out of order
+
     for ((i=0; i<=sidtotal; i++))
     do
-        index="sid$i"
-        if [[ ! ${DATA[$index]} ]]
+        indexsid="sid$i"
+        if [[ ! ${DATA[$indexsid]} ]]
         then
-            order_status=1
+            ordersid=1
             break
         fi
-        order_status=0
+        ordersid=0
+    done
+
+    for ((i=0; i<=uidtotal; i++))
+    do
+        indexuid="uid$i"
+        if [[ ! ${DATA[$indexuid]} ]]
+        then
+            orderuid=1
+            break
+        fi
+        orderuid=0
     done
 
     # Find the value on the next disponible index
-    if [[ $order_status == 1 ]]
+
+    if [[ $ordersid == 1 ]]
     then
         for ((i=0; i<=sidtotal+1; i++))
         do
-            index="sid$i"
-            if [[ ! ${DATA[$index]} ]]
+            indexsid="sid$i"
+            if [[ ! ${DATA[$indexsid]} ]]
             then
                 sidtotal=$i
                 break
@@ -48,11 +67,29 @@ while true; do
         sidtotal=$((sidtotal+1))
     fi
 
-    read -r -p "Name: " id
+    if [[ $orderuid == 1 ]]
+    then
+        for ((i=0; i<=uidtotal+1; i++))
+        do
+            indexuid="uid$i"
+            if [[ ! ${DATA[$indexuid]} ]]
+            then
+                uidtotal=$i
+                break
+            fi
+        done
+    else
+        uidtotal=$((uidtotal+1))
+    fi
+
+    read -r -p "Name: " idsid
+    read -r -p "Host User: " iduid
 
     # Add the id value array on the next disponible index
-    DATA["sid$sidtotal"]=$id
-    echo "DATA[sid$sidtotal]='$id'" >> .accessdata
+    DATA["sid$sidtotal"]=$idsid
+    DATA["uid$uidtotal"]=$iduid
+    echo "DATA[sid$sidtotal]='$idsid'" >> .accessdata
+    echo "DATA[uid$uidtotal]='$iduid'" >> .userdata
 
     read -r -p "Would you like to add more data? [y/n]: " MOREDATA
 

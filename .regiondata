@@ -1,5 +1,0 @@
-## Always let a last line blank
-REGIONS=( ## Suposed to be the Country...
-'Campinas'
-'Fortaleza'
-)
