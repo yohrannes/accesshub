@@ -3,3 +3,7 @@ declare -A DATA
 DATA[uidbackupusanewyork0]='root'
 DATA[uidcloudshellusanewyork0]='michael'
 DATA[uidinfrausamiami0]='hiana'
+DATA[uidinfrabrasilcampinas0]='zezao'
+DATA[uidappbrasilcampinas0]='root'
+DATA[uidinfrabrasilfortaleza0]='root'
+DATA[uidbackupcampinasvish0]='root'

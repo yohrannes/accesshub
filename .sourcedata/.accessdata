@@ -3,3 +3,7 @@ declare -A DATA
 DATA[sidbackupusanewyork0]='Hosting Resseller TechHost'
 DATA[sidcloudshellusanewyork0]='cloudsheelmichael'
 DATA[sidinfrausamiami0]='cloudawshiana'
+DATA[sidinfrabrasilcampinas0]='hospedagem do Zedinho revendedor'
+DATA[sidappbrasilcampinas0]='sodcijsdc'
+DATA[sidinfrabrasilfortaleza0]='servidorc=entralclaudinho'
+DATA[sidbackupcampinasvish0]='jamaicano1010'

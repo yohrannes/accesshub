@@ -3,3 +3,7 @@ declare -A DATA
 DATA[sidbackupusanewyork0]=''
 DATA[sidcloudshellusanewyork0]=''
 DATA[sidinfrausamiami0]=''
+DATA[portidinfrabrasilcampinas0]='933'
+DATA[portidappbrasilcampinas0]=''
+DATA[portidinfrabrasilfortaleza0]='444'
+DATA[portidbackupcampinasvish0]='8080'

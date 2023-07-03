@@ -46,6 +46,11 @@ while true; do
             hostidtotal=$((hostidtotal+1))
         fi
 
+        if [[ $indexcount == portid* ]]
+        then
+            portidtotal=$((portidtotal+1))
+        fi
+
     done
 
     # Find index out of order
@@ -92,6 +97,17 @@ while true; do
             break
         fi
         orderhostid=0
+    done
+
+    for ((i=0; i<=portidtotal; i++))
+    do
+        indexportid="portid$i"
+        if [[ ! ${DATA[$indexportid]} ]]
+        then
+            orderportid=1
+            break
+        fi
+        orderportid=0
     done
 
     # Find the value on the next disponible index
@@ -156,7 +172,22 @@ while true; do
         hostidtotal=$((hostidtotal+1))
     fi
 
-    read -r -p "Name :" sid
+    if [[ $orderportid == 1 ]]
+    then
+        for ((i=0; i<=portidtotal+1; i++))
+        do
+            indexportid="portid$i"
+            if [[ ! ${DATA[$indexportid]} ]]
+            then
+                portidtotal=$i
+                break
+            fi
+        done
+    else
+        portidtotal=$((portidtotal+1))
+    fi
+
+    read -r -p "Nickame :" sid
     read -r -p "Server User :" uid
     read -r -p "Password :" pid
     read -r -p "Host: " hostid
