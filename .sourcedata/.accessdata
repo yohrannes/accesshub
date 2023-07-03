@@ -1,12 +1,5 @@
 ## Always let a last line blank
 declare -A DATA
-DATA[sid0]='ocsijdc'
-DATA[sid1]='csoicjsd'
-DATA[sid2]='dpsocksdc'
-DATA[sid3]='spdvksdv'
-DATA[sid4]='spdcoksdc'
-DATA[sid5]='ewoiewj'
-DATA[sid6]='mineserver'
-DATA[sid7]='gclshell'
-DATA[sid8]='awsshell'
-DATA[sid9]='virtuozzoshell'
+DATA[sidbackupusanewyork0]='Hosting Resseller TechHost'
+DATA[sidcloudshellusanewyork0]='cloudsheelmichael'
+DATA[sidinfrausamiami0]='cloudawshiana'

@@ -1,0 +1,5 @@
+## Always let a last line blank
+declare -A DATA
+DATA[hostidbackupusanewyork0]='192.168.0.1'
+DATA[hostidcloudshellusanewyork0]='michaelgoogle.com'
+DATA[hostidinfrausamiami0]='420.103.202.21'

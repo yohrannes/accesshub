@@ -1,0 +1,5 @@
+## Always let a last line blank
+declare -A DATA
+DATA[sidbackupusanewyork0]=''
+DATA[sidcloudshellusanewyork0]=''
+DATA[sidinfrausamiami0]=''
