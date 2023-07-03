@@ -9,6 +9,12 @@ while true; do
     # sid = Server name
     # uid = Server user
     # pid = Server password
+    # hostid = Server ip
+    # portid = Server port
+
+    # typeid = Server type (backup, app, balancer, infra)
+    # regionid = Server Coutry or other, it depends of your business reach.
+    # sbregionid = Server State or other.
 
     sidtotal=0
     uidtotal=0
