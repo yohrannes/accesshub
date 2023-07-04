@@ -6,7 +6,7 @@ source ./.sourcedata/.hostaddress
 
 function newserver {
 while true; do
-
+    clear
     # sid = Server name
     # uid = Server user
     # pid = Server password
@@ -27,180 +27,154 @@ while true; do
 
     for indexcount in "${!DATA[@]}"
     do
-        if [[ $indexcount == sid* ]]
-        then
-            sidtotal=$((sidtotal+1))
-        fi
-
-        if [[ $indexcount == uid* ]]
-        then
-            uidtotal=$((uidtotal+1))
-        fi
-
-        if [[ $indexcount == pid* ]]
-        then
-            pidtotal=$((pidtotal+1))
-        fi
-
-        if [[ $indexcount == hostid* ]]
-        then
-            hostidtotal=$((hostidtotal+1))
-        fi
-
-        if [[ $indexcount == portid* ]]
-        then
-            portidtotal=$((portidtotal+1))
-        fi
-
+        case $indexcount in
+            sid*) ((sidtotal++));;
+            uid*) ((uidtotal++));;
+            pid*) ((pidtotal++));;
+            hostid*) ((hostidtotal++));;
+            portid*) ((portidtotal++));;
+        esac
     done
 
     # Find index out of order
 
-    for ((i=0; i<=sidtotal; i++))
-    do
+    ordersid=0
+    orderuid=0
+    orderpid=0
+    orderhostid=0
+    orderportid=0
+
+    for ((i=0; i<=sidtotal; i++)); do
         indexsid="sid$i"
-        if [[ ! ${DATA[$indexsid]} ]]
-        then
-            ordersid=1
-            break
-        fi
-        ordersid=0
+        [[ ! ${DATA[$indexsid]} ]] && ordersid=1 && break
     done
 
-    for ((i=0; i<=uidtotal; i++))
-    do
+    for ((i=0; i<=uidtotal; i++)); do
         indexuid="uid$i"
-        if [[ ! ${DATA[$indexuid]} ]]
-        then
-            orderuid=1
-            break
-        fi
-        orderuid=0
+        [[ ! ${DATA[$indexuid]} ]] && orderuid=1 && break
     done
 
-    for ((i=0; i<=pidtotal; i++))
-    do
+    for ((i=0; i<=pidtotal; i++)); do
         indexpid="pid$i"
-        if [[ ! ${DATA[$indexpid]} ]]
-        then
-            orderpid=1
-            break
-        fi
-        orderpid=0
+        [[ ! ${DATA[$indexpid]} ]] && orderpid=1 && break
     done
 
-    for ((i=0; i<=hostidtotal; i++))
-    do
+    for ((i=0; i<=hostidtotal; i++)); do
         indexhostid="hostid$i"
-        if [[ ! ${DATA[$indexhostid]} ]]
-        then
-            orderhostid=1
-            break
-        fi
-        orderhostid=0
+        [[ ! ${DATA[$indexhostid]} ]] && orderhostid=1 && break
     done
 
-    for ((i=0; i<=portidtotal; i++))
-    do
+    for ((i=0; i<=portidtotal; i++)); do
         indexportid="portid$i"
-        if [[ ! ${DATA[$indexportid]} ]]
-        then
-            orderportid=1
-            break
-        fi
-        orderportid=0
+        [[ ! ${DATA[$indexportid]} ]] && orderportid=1 && break
     done
+
 
     # Find the value on the next disponible index
 
-    if [[ $ordersid == 1 ]]
-    then
-        for ((i=0; i<=sidtotal+1; i++))
-        do
-            indexsid="sid$i"
-            if [[ ! ${DATA[$indexsid]} ]]
-            then
-                sidtotal=$i
-                break
-            fi
-        done
+    if [[ $ordersid == 1 ]]; then
+    for ((i=0; i<=sidtotal+1; i++)); do
+        indexsid="sid$i"
+        [[ ! ${DATA[$indexsid]} ]] && sidtotal=$i && break
+    done
     else
         sidtotal=$((sidtotal+1))
     fi
 
-    if [[ $orderuid == 1 ]]
-    then
-        for ((i=0; i<=uidtotal+1; i++))
-        do
+    if [[ $orderuid == 1 ]]; then
+        for ((i=0; i<=uidtotal+1; i++)); do
             indexuid="uid$i"
-            if [[ ! ${DATA[$indexuid]} ]]
-            then
-                uidtotal=$i
-                break
-            fi
+            [[ ! ${DATA[$indexuid]} ]] && uidtotal=$i && break
         done
     else
         uidtotal=$((uidtotal+1))
     fi
 
-    if [[ $orderpid == 1 ]]
-    then
-        for ((i=0; i<=pidtotal+1; i++))
-        do
+    if [[ $orderpid == 1 ]]; then
+        for ((i=0; i<=pidtotal+1; i++)); do
             indexpid="pid$i"
-            if [[ ! ${DATA[$indexpid]} ]]
-            then
-                pidtotal=$i
-                break
-            fi
+            [[ ! ${DATA[$indexpid]} ]] && pidtotal=$i && break
         done
     else
         pidtotal=$((pidtotal+1))
     fi
 
-    if [[ $orderhostid == 1 ]]
-    then
-        for ((i=0; i<=hostidtotal+1; i++))
-        do
+    if [[ $orderhostid == 1 ]]; then
+        for ((i=0; i<=hostidtotal+1; i++)); do
             indexhostid="hostid$i"
-            if [[ ! ${DATA[$indexhostid]} ]]
-            then
-                hostidtotal=$i
-                break
-            fi
+            [[ ! ${DATA[$indexhostid]} ]] && hostidtotal=$i && break
         done
     else
         hostidtotal=$((hostidtotal+1))
     fi
 
-    if [[ $orderportid == 1 ]]
-    then
-        for ((i=0; i<=portidtotal+1; i++))
-        do
+    if [[ $orderportid == 1 ]]; then
+        for ((i=0; i<=portidtotal+1; i++)); do
             indexportid="portid$i"
-            if [[ ! ${DATA[$indexportid]} ]]
-            then
-                portidtotal=$i
-                break
-            fi
+            [[ ! ${DATA[$indexportid]} ]] && portidtotal=$i && break
         done
     else
         portidtotal=$((portidtotal+1))
     fi
 
-    read -r -p "Nickame :" sid
+    # Getting access informations
+
+    read -r -p "Full name title :" sid
+
     read -r -p "Server User :" uid
-    read -r -p "Password :" pid
+
+    read -r -s -p "Password :" pid
+    echo
+
     read -r -p "Host: " hostid
+
     read -r -p "Specify port? (if not default 22) [y/n]" port
     case $port in
     y)
         read -r -p "Port: " portid
     ;;
+    *)
+        portid=22
+    ;;
     esac
-    read -r -p "Server type-group [infra,app,backup, etc.]: " typeid
-    read -r -p "Server region-group [country]: " regionid
-    read -r -p "Server sub-region group [state]: " sbregionid
+
+    while true; do
+    read -r -p "Server type [infra, app, backup, etc.]: " typeid
+    if [[ $typeid =~ [A-Z] || ${#typeid} -gt 8 ]]; then
+        echo "Please set max 8 small letters (lowercase)."
+    else
+        break
+    fi
+    done
+
+    read -r -p "Specify server region? (country) [y/n]" regop
+    case $regop in
+    y)
+    while true; do
+        read -r -p "Server region-group : " regionid
+    if [[ $regionid =~ [A-Z] || ${#regionid} -gt 8 ]]; then
+        echo "Please set max 8 small letters (lowercase)."
+    else
+        break
+    fi
+    done
+    ;;
+    esac
+
+    read -r -p "Specify server sub-region? (state) [y/n]" subregop
+    case $subregop in
+    y)
+    while true; do
+    read -r -p "Server sub-region group : " sbregionid
+    if [[ $typeid =~ [A-Z] || ${#typeid} -gt 8 ]]; then
+        echo "Please set max 8 small letters (lowercase)."
+    else
+        break
+    fi
+    done
+    ;;
+    esac
+    
 
     # Add the id value array on the next disponible index
 

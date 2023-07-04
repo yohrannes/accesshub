@@ -1,9 +1,8 @@
 ## Always let a last line blank
 declare -A DATA
-DATA[hostidbackupusanewyork0]='192.168.0.1'
-DATA[hostidcloudshellusanewyork0]='michaelgoogle.com'
-DATA[hostidinfrausamiami0]='420.103.202.21'
-DATA[hostidinfrabrasilcampinas0]='393.382.292.22'
-DATA[hostidappbrasilcampinas0]='111.111.11.11'
-DATA[hostidinfrabrasilfortaleza0]='203.234.234.2'
-DATA[hostidbackupcampinasvish0]='192.168.0.0'
+DATA[hostidtestetesteteste0]='teste'
+DATA[hostidgooglegooglegoogle0]='google'
+DATA[hostidhotmailhotmailhotmail0]='hotmail'
+DATA[hostidtestadnotestandotestando0]='testando'
+DATA[hostidosdijsdo0]='sodicjsdc'
+DATA[hostidfersoedr0]='spdgjsoij'

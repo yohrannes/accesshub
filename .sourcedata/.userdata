@@ -1,9 +1,8 @@
 ## Always let a last line blank
 declare -A DATA
-DATA[uidbackupusanewyork0]='root'
-DATA[uidcloudshellusanewyork0]='michael'
-DATA[uidinfrausamiami0]='hiana'
-DATA[uidinfrabrasilcampinas0]='zezao'
-DATA[uidappbrasilcampinas0]='root'
-DATA[uidinfrabrasilfortaleza0]='root'
-DATA[uidbackupcampinasvish0]='root'
+DATA[uidtestetesteteste0]='teste'
+DATA[uidgooglegooglegoogle0]='google'
+DATA[uidhotmailhotmailhotmail0]='hotmail'
+DATA[uidtestadnotestandotestando0]='testando'
+DATA[uidosdijsdo0]='ojdcosidj'
+DATA[uidfersoedr0]='spdocksd'
