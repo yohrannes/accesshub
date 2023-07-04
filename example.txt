@@ -1,0 +1,360 @@
+Cloud provider
+
+    Full name title:  Hosting Server CWP Panel
+    User:       root
+    Password:   LsCE2CbTYCuohLr
+    Host:       192.193.234.343
+    Port:       7580
+    Type:       hostingserver
+    Region:     brasil
+    Sub-region: campinas
+
+    Full name title:  Hosting Server CPanel
+    User:       hostingserver
+    Password:   ysTI2wqYx7igTw2
+    Host:       151.13.123.38
+    Port:   	7580
+    Type:       host
+    Region:     brasil
+    Sub-region: campinas
+
+    Full name title:  Infrastructure node1
+    User:       cloudprovider
+    Password:   wqCCnF5fX9ELKsJ
+    Host:       38.113.181.125
+    Port:
+    Type:       infra
+    Region:     brasil
+    Sub-region: campinas
+
+    Full name title:  Infrastructure node2
+    User:       cloudprovider
+    Password:   5zQCRbrhY0wdrm5
+    Host:       210.31.248.115
+    Port:
+    Type:       infra
+    Region:     brasil
+    Sub-region: fortaleza
+
+    Full name title:  Backup node 1
+    User:       root
+    Password:   kDi1rsICcELJ545
+    Host:       87.13.13.92
+    Port:
+    Type:       backup
+    Region:     brasil
+    Sub-region: campinas
+
+    Full name title:  Backup node 2
+    User:       root
+    Password:   XJ2zgCtvvWrZrQP
+    Host:       79.206.93.181
+    Port:
+    Type:       backup
+    Region:     brasil
+    Sub-region: fortaleza
+
+    Full name title:  Node for users 1
+    User:       root
+    Password:   9UOeGHmN7Of3nJU
+    Host:       95.243.164.186
+    Port:
+    Type:       usernode
+    Region:     brasil
+    Sub-region: campinas
+
+    Full name title:  Node for users 2
+    User:       root
+    Password:   zjoFPlMZZfeDGMW
+    Host:       97.137.85.82
+    Port:
+    Type:       usernode
+    Region:     brasil
+    Sub-region: campinas
+
+    Full name title:  Node for users 3
+    User:       root
+    Password:   GYR74t8UtUvuF8Q
+    Host:       105.84.133.229
+    Port:
+    Type:       usernode
+    Region:     brasil
+    Sub-region: fortaleza
+
+    Full name title:  Node for users 4
+    User:       root
+    Password:   UlMnqXiIXMBWMcO
+    Host:       24.34.239.50
+    Port:
+    Type:       usernode
+    Region:     brasil
+    Sub-region: fortaleza
+
+Business of Food
+
+    Full name title:  Kubernetes server
+    User:       root
+    Password:   MoJbXKiyst8eVBO
+    Host:       46.201.71.105
+    Port:
+    Type:       kubernetes
+    Region:     usa
+    Sub-region: newyork // really lowercase?? if yes will need to
+add a new variable region and regionid
+
+    Full name title:  Balancer APACHE Master
+    User:       root
+    Password:   S8ewuaDOyvW1aDY
+    Host:       255.61.152.193
+    Port:
+    Type:       balancer
+    Region:     usa
+    Sub-region: newyork
+
+    Full name title:  Balancer APACHE Replica of master
+    User:       root
+    Password:   G9rjIahgYRxn2xr
+    Host:       180.88.37.163
+    Port:
+    Type:       balancer
+    Region:     usa
+    Sub-region: newyork
+
+    Full name title: Application server NGINX
+    User:       root
+    Password:   YtJOk4LwuU9MOqW
+    Host:       32.86.26.19
+    Port:
+    Type:       app
+    Region:     usa
+    Sub-region: newyork
+
+    Full name title: Database MYSQL
+    User:       mysql
+    Password:   IihrQ25B4ovcsOo
+    Host:       249.192.22.156
+    Port:
+    Type:       database
+    Region:     usa
+    Sub-region: newyork
+
+    Full name title: Database Backup Storage S3
+    User:       root
+    Password:   xcxWf6lJJr1StQV
+    Host:       55.251.170.56
+    Port:
+    Type:       backup
+    Region:     australia
+    Sub-region: victoria
+
+Business of bags
+
+    Full name title: Balancer NGINX Master
+    User:       root
+    Password:   FHZUmTb7WqX9lLm
+    Host:       94.110.215.187
+    Port:
+    Type:       balancer
+    Region:     canada
+    Sub-region: vancouver
+
+    Full name title: Balancer NGINX Replica of master
+    User:       root
+    Password:   ZLkXQa8YRxZGu79
+    Host:       20.167.106.21
+    Port:
+    Type:       balancer
+    Region:     canada
+    Sub-region: vancouver
+
+    Full name title: Aplication server APACHE Master
+    User:       root
+    Password:   EKbtNgvhY8otp9z
+    Host:       191.218.242.76
+    Port:
+    Type:       app
+    Region:     canada
+    Sub-region: vancouver
+
+    Full name title: Aplication server APACHE Replica 1
+    User:       root
+    Password:   DtA31vC58FPCtLa
+    Host:       24.173.4.181
+    Port:
+    Type:       app
+    Region:     canada
+    Sub-region: vancouver
+
+    Full name title: Aplication server APACHE Replica 2
+    User:       root
+    Password:   SRJYTverViLP42E
+    Host:       53.21.240.240
+    Port:
+    Type:       app
+    Region:     canada
+    Sub-region: vancouver
+
+    Full name title: Aplication server APACHE Replica 3
+    User:       root
+    Password:   luE46UN5NReu5Ws
+    Host:       66.87.102.2
+    Port:
+    Type:       app
+    Region:     canada
+    Sub-region: vancouver
+
+    Full name title: Database
+    User:       root
+    Password:   9A8feF7SAud5n8q
+    Host:       248.56.64.118
+    Port:
+    Type:       app
+    Region:     canada
+    Sub-region: vancouver
+
+Business International of Tires
+
+    Full name title: Kubernetes Server
+    User:       root
+    Password:   ht5Nh6entvDmpQ9
+    Host:       116.101.100.192
+    Port:
+    Type:       kubernetes
+    Region:     japan
+    Sub-region: tokyo
+
+    Full name title: Balancer NGINX Master app1
+    User:       root
+    Password:   OHnlnosILaStXKZ
+    Host:       144.75.12.142
+    Port:
+    Type:       balancer
+    Region:     japan
+    Sub-region: tokyo
+
+    Full name title: Balancer NGINX Replica 1 app1
+    User:       root
+    Password:   ufRAwUqrgSHLn3K
+    Host:       251.53.90.159
+    Port:
+    Type:       balancer
+    Region:     japan
+    Sub-region: tokyo
+
+    Full name title: Balancer NGINX Replica 2 app1
+    User:       root
+    Password:   s6tyiAlkAhtbgT7
+    Host:       18.180.215.64
+    Port:
+    Type:       balancer
+    Region:     japan
+    Sub-region: tokyo
+
+    Full name title: Aplication server NGINX Master app1
+    User:       root
+    Password:   mUuJ1tK12IGjAJA
+    Host:       63.170.1.217
+    Port:
+    Type:       app
+    Region:     japan
+    Sub-region: tokyo
+
+    Full name title: Aplication server NGINX Replica app1
+    User:       root
+    Password:   hMabsIITUS3dpHS
+    Host:       238.105.225.18
+    Port:
+    Type:       japan
+    Region:     tokyo
+    Sub-region: beijing
+
+    Full name title: Database ORACLE Master app1
+    User:       root
+    Password:   ofnKLoQ6fBKPxv8
+    Host:       23.14.85.59
+    Port:
+    Type:       database
+    Region:     japan
+    Sub-region: tokyo
+
+    Full name title: Database ORACLE Replica app1
+    User:       root
+    Password:   UeDAENdvL6ZjRQF
+    Host:       68.237.136.128
+    Port:
+    Type:       database
+    Region:     japan
+    Sub-region: tokyo
+    
+    Full name title: Balancer NGINX Master app2
+    User:       root
+    Password:   x7wP3yHIPG61IMv
+    Host:       80.99.232.61
+    Port:
+    Type:       balancer
+    Region:     china
+    Sub-region: beijing
+
+    Full name title: Balancer NGINX Replica 1 app2
+    User:       root
+    Password:   J5xWrWIjJNDsfCZ
+    Host:       139.246.99.41
+    Port:
+    Type:       balancer
+    Region:     china
+    Sub-region: beijing
+
+    Full name title: Balancer NGINX Replica 2 app2
+    User:       root
+    Password:   s6tyiAlkAhtbgT7
+    Host:       18.180.215.64
+    Port:
+    Type:       balancer
+    Region:     china
+    Sub-region: beijing
+
+    Full name title: Aplication server NGINX Master app2
+    User:       root
+    Password:   HqRSvBiFVi0kEfp
+    Host:       192.123.11.65
+    Port:
+    Type:       app
+    Region:     china
+    Sub-region: beijing
+
+    Full name title: Aplication server NGINX Replica app2
+    User:       root
+    Password:   sgqldVg3ER3rkfX
+    Host:       6.133.223.126
+    Port:
+    Type:       app
+    Region:     china
+    Sub-region: beijing
+
+    Full name title: Database ORACLE Master app2
+    User:       root
+    Password:   ofnKLoQ6fBKPxv8
+    Host:       238.12.135.43
+    Port:
+    Type:       database
+    Region:     china
+    Sub-region: beijing
+
+    Full name title: Database ORACLE Replica app2
+    User:       root
+    Password:   UeDAENdvL6ZjRQF
+    Host:       151.96.94.123
+    Port:
+    Type:       database
+    Region:     china
+    Sub-region: beijing
+
+    Full name title: Backup Storage S3 AWS
+    User:       thefinalboss
+    Password:   oMCG4tE6mf7kvpd
+    Host:       160.1.49.178
+    Port:       8812
+    Type:       backup
+    Region:     japan
+    Sub-region: tokyo
+

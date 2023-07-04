@@ -6,6 +6,7 @@ source ./.sourcedata/.hostaddress
 
 function newserver {
 while true; do
+
     # sid = Server name
     # uid = Server user
     # pid = Server password
@@ -202,6 +203,7 @@ while true; do
     read -r -p "Server sub-region group [state]: " sbregionid
 
     # Add the id value array on the next disponible index
+
     DATA["sid$typeid$regionid$sbregionid$sidtotal"]=$sid
     DATA["uid$typeid$regionid$sbregionid$uidtotal"]=$uid
     DATA["pid$typeid$regionid$sbregionid$pidtotal"]=$pid
