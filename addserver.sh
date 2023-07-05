@@ -7,15 +7,28 @@ source ./.sourcedata/.hostaddress
 function newserver {
 while true; do
     clear
+
+    # Variables used for organize the access data
+    # DATA[A - A contains sid,uid,pid,hostid,portid
+
     # sid = Server name
     # uid = Server user
     # pid = Server password
     # hostid = Server ip
     # portid = Server port
+    
 
-    # typeid = Server type (backup, app, balancer, infra)
-    # regionid = Server Coutry or other, it depends of your business reach.
-    # sbregionid = Server State or other.
+    # Variables for filter the server type and region
+
+    # DATA[AB - B contains typeid (backup, app, balancer, infra)
+    # DATA[ABC - C contains regionid
+    # DATA[ABCDN] - D contains sbregionid
+    # DATA[ABCDN] - N contains the idendify number in case of same filter values
+
+    # typeid = Server type
+    # regionid = Server Coutry or other, it depends of your business reach
+    # sbregionid = Server State or other
+
 
     sidtotal=0
     uidtotal=0
@@ -174,7 +187,6 @@ while true; do
     done
     ;;
     esac
-    
 
     # Add the id value array on the next disponible index
 
