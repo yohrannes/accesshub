@@ -1,11 +1,8 @@
 ## Always let a last line blank
 declare -A DATA
-DATA[portidtestetesteteste0]='teste'
-DATA[portidgooglegooglegoogle0]='0000'
-DATA[portidhotmailhotmailhotmail0]='1111'
-DATA[portidtestadnotestandotestando0]=''
-DATA[portidosdijsdo0]=''
-DATA[portidfersoedr0]='22'
-DATA[portidgooglejapantokyo0]='22'
-DATA[portidodindoc0]='22'
+DATA[portidteste0]='22'
+DATA[portidteste0]='22'
+DATA[portidteste0]='22'
+DATA[portidteste0]='22'
+DATA[portidteste0]='22'
 DATA[portidteste0]='22'

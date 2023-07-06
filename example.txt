@@ -5,16 +5,16 @@ Cloud provider
     Password:   LsCE2CbTYCuohLr
     Host:       192.193.234.343
     Port:       7580
-    Type:       hostingserver
+    Type:       hostserver
     Region:     brasil
     Sub-region: campinas
 
     Full name title:  Hosting Server CPanel
-    User:       hostingserver
+    User:       root
     Password:   ysTI2wqYx7igTw2
     Host:       151.13.123.38
     Port:   	7580
-    Type:       host
+    Type:       hostserver
     Region:     brasil
     Sub-region: campinas
 

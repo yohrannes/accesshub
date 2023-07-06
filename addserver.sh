@@ -1,8 +1,9 @@
 #!/bin/bash
 source ./.sourcedata/.accessdata
+source ./.sourcedata/.hostaddress
+source ./.sourcedata/.hostports
 source ./.sourcedata/.userdata
 source ./.sourcedata/.userpassword
-source ./.sourcedata/.hostaddress
 
 function newserver {
 while true; do
@@ -136,8 +137,7 @@ while true; do
 
     read -r -p "Server User :" uid
 
-    read -r -s -p "Password :" pid
-    echo
+    read -r -p "Password :" pid
 
     read -r -p "Host: " hostid
 
@@ -153,8 +153,8 @@ while true; do
 
     while true; do
     read -r -p "Server type [infra, app, backup, etc.]: " typeid
-    if [[ $typeid =~ [A-Z] || ${#typeid} -gt 8 ]]; then
-        echo "Please set max 8 small letters (lowercase)."
+    if [[ $typeid =~ [A-Z] || ${#typeid} -gt 10 ]]; then
+        echo "Please set max 10 small letters (lowercase)."
     else
         break
     fi
@@ -165,8 +165,8 @@ while true; do
     y)
     while true; do
         read -r -p "Server region-group : " regionid
-    if [[ $regionid =~ [A-Z] || ${#regionid} -gt 8 ]]; then
-        echo "Please set max 8 small letters (lowercase)."
+    if [[ $regionid =~ [A-Z] || ${#regionid} -gt 10 ]]; then
+        echo "Please set max 10 small letters (lowercase)."
     else
         break
     fi
@@ -179,8 +179,8 @@ while true; do
     y)
     while true; do
     read -r -p "Server sub-region group : " sbregionid
-    if [[ $typeid =~ [A-Z] || ${#typeid} -gt 8 ]]; then
-        echo "Please set max 8 small letters (lowercase)."
+    if [[ $typeid =~ [A-Z] || ${#typeid} -gt 10 ]]; then
+        echo "Please set max 10 small letters (lowercase)."
     else
         break
     fi

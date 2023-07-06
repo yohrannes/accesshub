@@ -1,11 +1,8 @@
 ## Always let a last line blank
 declare -A DATA
-DATA[hostidtestetesteteste0]='teste'
-DATA[hostidgooglegooglegoogle0]='google'
-DATA[hostidhotmailhotmailhotmail0]='hotmail'
-DATA[hostidtestadnotestandotestando0]='testando'
-DATA[hostidosdijsdo0]='sodicjsdc'
-DATA[hostidfersoedr0]='spdgjsoij'
-DATA[hostidgooglejapantokyo0]='sdocisjdocsij'
-DATA[hostidodindoc0]='osdijsod'
+DATA[hostidteste0]='teste'
+DATA[hostidteste0]='teste'
+DATA[hostidteste0]='teste'
+DATA[hostidteste0]='teste'
+DATA[hostidteste0]='teste'
 DATA[hostidteste0]='teste'
