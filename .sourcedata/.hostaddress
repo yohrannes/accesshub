@@ -1,8 +1,0 @@
-## Always let a last line blank
-declare -A DATA
-DATA[hostidteste0]='teste'
-DATA[hostidteste0]='teste'
-DATA[hostidteste0]='teste'
-DATA[hostidteste0]='teste'
-DATA[hostidteste0]='teste'
-DATA[hostidteste0]='teste'
