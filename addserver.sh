@@ -41,119 +41,6 @@ while true; do
     # regionid = Server region (Coutry or other, it depends of your business reach)
     # sbregionid = Server sub-region (State or other)
 
-
-
-    # NEW WAY TO ORAGANIZE DUPLICATE INDEXING HERE....
-
-
-
-    # sidtotal=0
-    # uidtotal=0
-    # pidtotal=0
-    # hostidtotal=0
-    # portidtotal=0
-
-    # indexcount=0
-
-    # function duplicateindex {
-
-    # for indexcount in "${!DATA[@]}"
-    # do
-    #     case $indexcount in
-    #         sid$typeid$regionid$sbregionid*) ((sidtotal++));;
-    #         uid$typeid$regionid$sbregionid*) ((uidtotal++));;
-    #         pid$typeid$regionid$sbregionid*) ((pidtotal++));;
-    #         hostid$typeid$regionid$sbregionid*) ((hostidtotal++));;
-    #         portid$typeid$regionid$sbregionid*) ((portidtotal++));;
-    #     esac
-    # done
-
-    # }
-
-    # # Find index out of order
-
-    # ordersid=0
-    # orderuid=0
-    # orderpid=0
-    # orderhostid=0
-    # orderportid=0
-
-    # for ((i=0; i<=sidtotal; i++)); do
-    #     indexsid="sid$i"
-    #     [[ ! ${DATA[$indexsid]} ]] && ordersid=1 && break
-    # done
-
-    # for ((i=0; i<=uidtotal; i++)); do
-    #     indexuid="uid$i"
-    #     [[ ! ${DATA[$indexuid]} ]] && orderuid=1 && break
-    # done
-
-    # for ((i=0; i<=pidtotal; i++)); do
-    #     indexpid="pid$i"
-    #     [[ ! ${DATA[$indexpid]} ]] && orderpid=1 && break
-    # done
-
-    # for ((i=0; i<=hostidtotal; i++)); do
-    #     indexhostid="hostid$i"
-    #     [[ ! ${DATA[$indexhostid]} ]] && orderhostid=1 && break
-    # done
-
-    # for ((i=0; i<=portidtotal; i++)); do
-    #     indexportid="portid$i"
-    #     [[ ! ${DATA[$indexportid]} ]] && orderportid=1 && break
-    # done
-
-    # # Find the value on the next disponible index
-
-    # if [[ $ordersid == 1 ]]; then
-    # for ((i=0; i<=sidtotal+1; i++)); do
-    #     indexsid="sid$i"
-    #     [[ ! ${DATA[$indexsid]} ]] && sidtotal=$i && break
-    # done
-    # else
-    #     sidtotal=$((sidtotal+1))
-    # fi
-
-    # if [[ $orderuid == 1 ]]; then
-    #     for ((i=0; i<=uidtotal+1; i++)); do
-    #         indexuid="uid$i"
-    #         [[ ! ${DATA[$indexuid]} ]] && uidtotal=$i && break
-    #     done
-    # else
-    #     uidtotal=$((uidtotal+1))
-    # fi
-
-    # if [[ $orderpid == 1 ]]; then
-    #     for ((i=0; i<=pidtotal+1; i++)); do
-    #         indexpid="pid$i"
-    #         [[ ! ${DATA[$indexpid]} ]] && pidtotal=$i && break
-    #     done
-    # else
-    #     pidtotal=$((pidtotal+1))
-    # fi
-
-    # if [[ $orderhostid == 1 ]]; then
-    #     for ((i=0; i<=hostidtotal+1; i++)); do
-    #         indexhostid="hostid$i"
-    #         [[ ! ${DATA[$indexhostid]} ]] && hostidtotal=$i && break
-    #     done
-    # else
-    #     hostidtotal=$((hostidtotal+1))
-    # fi
-
-    # if [[ $orderportid == 1 ]]; then
-    #     for ((i=0; i<=portidtotal+1; i++)); do
-    #         indexportid="portid$i"
-    #         [[ ! ${DATA[$indexportid]} ]] && portidtotal=$i && break
-    #     done
-    # else
-    #     portidtotal=$((portidtotal+1))
-    # fi
-
-    # Getting access informations 
-    # Needed stipulate entry requirements (casesensitive, max characters)...
-    # Needed program what happens if some value will not be added...
-
     read -r -p "Full name title :" sid
 
     read -r -p "Server User :" uid
@@ -220,25 +107,47 @@ while true; do
     echo "SERVERTYPE[${#SERVERTYPE[@]}]='$typeid'" >> ./.sourcedata/index/typeid
     SERVERTYPE[${#SERVERTYPE[@]}]=${typeid}
 
-    DATA["sid$typeid$regionid$sbregionid$sidtotal"]=$sid
-    DATA["uid$typeid$regionid$sbregionid$uidtotal"]=$uid
-    DATA["pid$typeid$regionid$sbregionid$pidtotal"]=$pid
-    DATA["hostid$typeid$regionid$sbregionid$hostidtotal"]=$hostid
-    DATA["portid$typeid$regionid$sbregionid$portidtotal"]=$portid
+    declare -A dataindex
+
+    sidtotal=0
+
+    for i in ${!DATA[@]}; do ## Transfer data indexing do dataindex array
+        dataindex=$i
+    done
+
+    if [[ "sid$typeid$regionid$sbregionid$sidtotal" == $dataindex ]]; then
+        ((sidtotal++))
+    fi
 
     echo "DATA[sid$typeid$regionid$sbregionid$sidtotal]='$sid'" >> ./.sourcedata/accessdata
-    echo "DATA[uid$typeid$regionid$sbregionid$uidtotal]='$uid'" >> ./.sourcedata/userdata
-    echo "DATA[pid$typeid$regionid$sbregionid$pidtotal]='$pid'" >> ./.sourcedata/userpassword
-    echo "DATA[hostid$typeid$regionid$sbregionid$hostidtotal]='$hostid'" >> ./.sourcedata/hostaddress
-    echo "DATA[portid$typeid$regionid$sbregionid$portidtotal]='$portid'" >> ./.sourcedata/hostports
+    DATA["sid$typeid$regionid$sbregionid$sidtotal"]=$sid
 
-    duplicateindex
+    uidtotal=0
+    
+    echo "DATA[uid$typeid$regionid$sbregionid$uidtotal]='$uid'" >> ./.sourcedata/userdata
+    DATA["uid$typeid$regionid$sbregionid$uidtotal"]=$uid
+
+    pidtotal=0
+
+    echo "DATA[pid$typeid$regionid$sbregionid$pidtotal]='$pid'" >> ./.sourcedata/userpassword
+    DATA["pid$typeid$regionid$sbregionid$pidtotal"]=$pid
+
+    hostidtotal=0
+
+    echo "DATA[hostid$typeid$regionid$sbregionid$hostidtotal]='$hostid'" >> ./.sourcedata/hostaddress
+    DATA["hostid$typeid$regionid$sbregionid$hostidtotal"]=$hostid
+
+    portidtotal=0
+
+    echo "DATA[portid$typeid$regionid$sbregionid$portidtotal]='$portid'" >> ./.sourcedata/hostports
+    DATA["portid$typeid$regionid$sbregionid$portidtotal"]=$portid
 
     read -r -p "Would you like to add more data? [y/n]: " MOREDATA
 
     if [[ $MOREDATA != [yY] ]]; then
         break
     fi
+
     done
 }
 
