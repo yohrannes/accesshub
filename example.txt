@@ -99,8 +99,7 @@ Business of Food
     Port:
     Type:       kubernetes
     Region:     usa
-    Sub-region: newyork // really lowercase?? if yes will need to
-add a new variable region and regionid
+    Sub-region: newyork
 
     Full name title:  Balancer APACHE Master
     User:       root
