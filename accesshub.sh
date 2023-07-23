@@ -1,19 +1,19 @@
 #!/bin/bash
 declare -A regions
-source ./.sourcedata/index/regionid
+source ./.sourcedata/index/regionid.conf
 
 declare -A subregions
-source ./.sourcedata/index/sbregionid
+source ./.sourcedata/index/sbregionid.conf
 
 declare -A servertype
-source ./.sourcedata/index/typeid
+source ./.sourcedata/index/typeid.conf
 
 declare -A data
-source ./.sourcedata/accessdata
-source ./.sourcedata/hostaddress
-source ./.sourcedata/hostports
-source ./.sourcedata/userdata
-source ./.sourcedata/userpassword
+source ./.sourcedata/accessdata.conf
+source ./.sourcedata/hostaddress.conf
+source ./.sourcedata/hostports.conf
+source ./.sourcedata/userdata.conf
+source ./.sourcedata/userpassword.conf
 
 echo Script started in "$(date)" >> /var/log/accesshub.log from user "$(whoami)"
 
@@ -263,13 +263,13 @@ trap '' 2 # disable Ctrl+C, dont change that if you don't want problems....
     fullname
 
     # Add the id value array on the next disponible index
-    echo "regions[${#regions[@]}]='$regionid'" >> ./.sourcedata/index/regionid
+    echo "regions[${#regions[@]}]='$regionid'" >> ./.sourcedata/index/regionid.conf
     regions[${#regions[@]}]=${regionid}
 
-    echo "subregions[${#subregions[@]}]='$sbregionid'" >> ./.sourcedata/index/sbregionid
+    echo "subregions[${#subregions[@]}]='$sbregionid'" >> ./.sourcedata/index/sbregionid.conf
     subregions[${#subregions[@]}]=${sbregionid}
 
-    echo "servertype[${#servertype[@]}]='$typeid'" >> ./.sourcedata/index/typeid
+    echo "servertype[${#servertype[@]}]='$typeid'" >> ./.sourcedata/index/typeid.conf
     servertype[${#servertype[@]}]=${typeid}
 
     sidtotal=0
@@ -300,15 +300,15 @@ trap '' 2 # disable Ctrl+C, dont change that if you don't want problems....
         done
     done
 
-    echo "data[sid$typeid$regionid$sbregionid$sidtotal]='$sid'" >> ./.sourcedata/accessdata
+    echo "data[sid$typeid$regionid$sbregionid$sidtotal]='$sid'" >> ./.sourcedata/accessdata.conf
     data["sid$typeid$regionid$sbregionid$sidtotal"]=$sid
-    echo "data[uid$typeid$regionid$sbregionid$uidtotal]='$uid'" >> ./.sourcedata/userdata
+    echo "data[uid$typeid$regionid$sbregionid$uidtotal]='$uid'" >> ./.sourcedata/userdata.conf
     data["uid$typeid$regionid$sbregionid$uidtotal"]=$uid
-    echo "data[pid$typeid$regionid$sbregionid$pidtotal]='$pid'" >> ./.sourcedata/userpassword
+    echo "data[pid$typeid$regionid$sbregionid$pidtotal]='$pid'" >> ./.sourcedata/userpassword.conf
     data["pid$typeid$regionid$sbregionid$pidtotal"]=$pid
-    echo "data[hostid$typeid$regionid$sbregionid$hostidtotal]='$hostid'" >> ./.sourcedata/hostaddress
+    echo "data[hostid$typeid$regionid$sbregionid$hostidtotal]='$hostid'" >> ./.sourcedata/hostaddress.conf
     data["hostid$typeid$regionid$sbregionid$hostidtotal"]=$hostid
-    echo "data[portid$typeid$regionid$sbregionid$portidtotal]='$portid'" >> ./.sourcedata/hostports
+    echo "data[portid$typeid$regionid$sbregionid$portidtotal]='$portid'" >> ./.sourcedata/hostports.conf
     data["portid$typeid$regionid$sbregionid$portidtotal"]=$portid
 
     moredata(){
