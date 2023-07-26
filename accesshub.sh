@@ -78,7 +78,7 @@ accessnodemenu(){
     echo ''
     read -p "Enter the desired option: " accessnodeop
 
-    case ${accessnodeop} in
+    case $accessnodeop in
     1) clear; regionmenu;;
     2) clear; typemenu;;
     b) clear; mainmenu;;
@@ -98,26 +98,90 @@ regionmenu() {
 
 
     declare -A ckregionsoutput
+    declare -A dispreg
 
+    i=0
     for element in "${regions[@]}"; do
         if [[ -z "${ckregionsoutput[$element]}" ]]; then
-            echo "$element"
+            echo "$i - $element"
             ckregionsoutput["$element"]=true
+            dispreg["$i"]=$element
+            ((++i))
         fi
     done
 
     echo
-    read -p "Select the region you would like to access [Press v to go back]:" opregion
+    read -p "Select the respective value of the region you would like to access [Press v to go back]:" opregion
 
     if [ -n "$opregion" ] && { [ "$opregion" = "v" ] || [ "$opregion" = "V" ]; }; then
         accessnodemenu
-    else
+    elif [ -n "$opregion" ] && [[ $opregion =~ ^[0-9]+$ ]]; then
         nodemenu
+    else
+        echo "Wrong value"
+        sleep 1
+        loading
+        regionmenu
     fi
 }
 
 typemenu(){
     clear
+    echo 'Disponible Node types.'
+    echo '---------------------'
+
+    declare -A cktypesoutput
+
+    i=0
+    for element in "${servertype[@]}"; do
+        if [[ -z "${cktypesoutput[$element]}" ]]; then
+            echo "$i - $element"
+            cktypesoutput["$element"]=true
+            ((++i))
+        fi
+    done
+
+    echo
+    read -p "Select the respective value of the node type you would like to access [Press v to go back]:" opnodetype
+
+    if [ -n "$opnodetype" ] && { [ "$opnodetype" = "v" ] || [ "$opnodetype" = "V" ]; }; then
+        accessnodemenu
+    elif [ -n "$opnodetype" ] && [[ $opnodetype =~ ^[0-9]+$ ]]; then
+        nodemenu
+    else
+        echo "Wrong value"
+        sleep 1
+        loading
+        typemenu
+    fi
+}
+
+nodemenu(){
+
+    if [ ${accessnodeop} == 1 ]; then
+        clear
+        echo Disponible nodes on ${dispreg[$opregion]}
+        echo
+
+        ###nodesss
+        ###nodesss
+        ###nodesss
+        ###nodesss
+
+    read -p "Select the respective value of the node you would like to access [Press v to go back]:" opnode
+
+    if [ -n "$opnode" ] && { [ "$opnode" = "v" ] || [ "$opnode" = "V" ]; }; then
+        regionmenu
+    elif [ -n "$opnode" ] && [[ $opnode =~ ^[0-9]+$ ]]; then
+        connect
+    else
+        echo "Wrong value"
+        sleep 1
+        loading
+        nodemenu
+    fi
+    fi
+
 }
 
 connect(){
