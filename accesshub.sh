@@ -96,10 +96,16 @@ regionmenu() {
     echo 'Disponible Regions.'
     echo '---------------------'
 
-    for ((i=0; i<${#regions[@]}; i++));
-    do
-        clear
+
+    declare -A ckregionsoutput
+
+    for element in "${regions[@]}"; do
+        if [[ -z "${ckregionsoutput[$element]}" ]]; then
+            echo "$element"
+            ckregionsoutput["$element"]=true
+        fi
     done
+
     echo
     read -p "Select the region you would like to access [Press v to go back]:" opregion
 
@@ -110,7 +116,7 @@ regionmenu() {
     fi
 }
 
-nodemenu(){
+typemenu(){
     clear
 }
 
