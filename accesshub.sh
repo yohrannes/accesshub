@@ -96,7 +96,6 @@ regionmenu() {
     echo 'Disponible Regions.'
     echo '---------------------'
 
-
     declare -A ckregionsoutput
     declare -A dispreg
 
@@ -131,12 +130,14 @@ typemenu(){
     echo '---------------------'
 
     declare -A cktypesoutput
+    declare -A dispntypes
 
     i=0
     for element in "${servertype[@]}"; do
         if [[ -z "${cktypesoutput[$element]}" ]]; then
             echo "$i - $element"
             cktypesoutput["$element"]=true
+            dispntypes["$i"]=$element
             ((++i))
         fi
     done
@@ -158,44 +159,127 @@ typemenu(){
 
 nodemenu(){
 
+    declare -A selectndhst
+    declare -A selectndprt
+    declare -A selectndpw
+    declare -A selectndusr
+
     if [ ${accessnodeop} == 1 ]; then
         clear
         echo Disponible nodes on ${dispreg[$opregion]}
+        echo '---------------------'
+
+        declare -A cktypesoutput
+        declare -A dispntypes
+        
+        i=0
+        for element in "${servertype[@]}"; do
+            if [[ -z "${cktypesoutput[$element]}" ]]; then
+                cktypesoutput["$element"]=true
+                dispntypes["$i"]=$element
+                ((i++))
+            fi
+        done
+
         echo
 
-        ###nodesss
-        ###nodesss
-        ###nodesss
-        ###nodesss
+        i=0
+        countnodes=0
+        for index in ${!data[@]}; do
+            a=0
+            for typeindex in ${!dispntypes[@]}; do
+                if [[ "$index" == "sid${dispntypes[$a]}${dispreg[$opregion]}"* ]]; then
+                    echo "$countnodes - ${data[$index]}"
+                    nodeselected[$countnodes]=$index
+                    ((countnodes++))
+                fi
+                ((a++))
+            done
+            ((i++))
+        done
 
-    read -p "Select the respective value of the node you would like to access [Press v to go back]:" opnode
+        echo
+        read -p "Select the respective value of the node you would like to access [Press v to go back]:" opnode
 
-    if [ -n "$opnode" ] && { [ "$opnode" = "v" ] || [ "$opnode" = "V" ]; }; then
-        regionmenu
-    elif [ -n "$opnode" ] && [[ $opnode =~ ^[0-9]+$ ]]; then
-        connect
-    else
-        echo "Wrong value"
-        sleep 1
-        loading
-        nodemenu
-    fi
+        if [ -n "$opnode" ] && { [ "$opnode" = "v" ] || [ "$opnode" = "V" ]; }; then
+            regionmenu
+        elif [ -n "$opnode" ] && [[ $opnode =~ ^[0-9]+$ ]]; then
+            connect
+        else
+            echo "Wrong value"
+            sleep 1
+            loading
+            nodemenu
+        fi
+
+    elif [ ${accessnodeop} == 2 ]; then
+        clear
+        echo
+        echo Disponible ${dispntypes[$opnodetype]} nodes.
+        echo '---------------------'
+
+        i=0
+        countndmenu=0
+        indexselectndhst=0
+        indexselectndprt=0
+        indexselectndpw=0
+        indexselectndusr=0
+        for index in ${!data[@]};do
+            if [[ "$index" == "sid${dispntypes[$opnodetype]}"* ]]; then
+                echo "$countndmenu - ${data[$index]}"
+                ((countndmenu++))
+            elif [[ "$index" == "hostid${dispntypes[$opnodetype]}"* ]]; then
+                selectndhst[$indexselectndhst]=$index
+                ((indexselectndhst++))
+            elif [[ "$index" == "portid${dispntypes[$opnodetype]}"* ]]; then
+                selectndprt[$indexselectndprt]=$index
+                ((indexselectndprt++))
+            elif [[ "$index" == "pid${dispntypes[$opnodetype]}"* ]]; then
+                selectndpw[$indexselectndpw]=$index
+                ((indexselectndpw++))
+            elif [[ "$index" == "uid${dispntypes[$opnodetype]}"* ]]; then
+                selectndusr[$indexselectndusr]=$index
+                ((indexselectndusr++))
+            fi
+            ((i++))
+        done
+
+        echo
+        read -p "Select the respective value of the node you would like to access [Press v to go back]:" opnode
+
+        if [ -n "$opnode" ] && { [ "$opnode" = "v" ] || [ "$opnode" = "V" ]; }; then
+            typemenu
+        elif [ -n "$opnode" ] && [[ $opnode =~ ^[0-9]+$ ]]; then
+            connect
+        else
+            echo "Wrong value"
+            sleep 1
+            loading
+            nodemenu
+        fi
+
     fi
 
 }
 
 connect(){
-    loading
+
+    test=$opnode
     echo "Connecting"
-    loading
-    # sshpass -p "${data[$pwdata]}" ssh "$USER"@"${data[$ipdata]}"
+    echo 
+    echo "sshpass -p ${data[${selectndusr[$opnode]}]}"
+    echo "sshpass -p ${data[${selectndprt[$test]}]}"
+    echo "sshpass -p ${data[${selectndhst[$test]}]}"
+    echo "sshpass -p ${data[${selectndpw[$test]}]}"
+    read -p "-------------" vdfv
+
 }
 
 function newserver {
 
 trap '' 2 # disable Ctrl+C, dont change that if you don't want problems....
 
-    # Variables used for organize the access data
+    # Variables used for organize thse access data
     # data[A - A contains sid,uid,pid,hostid,portid
 
     # sid = Server name
@@ -347,8 +431,6 @@ trap '' 2 # disable Ctrl+C, dont change that if you don't want problems....
     pidtotal=0
     hostidtotal=0
     portidtotal=0
-
-    declare -A dataindex=${!data[@]}
 
     for a in "${!data[@]}"; do # Check duplicate indexes...
         for ((i=0;i<=${#data[@]};i++)); do

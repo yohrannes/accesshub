@@ -207,7 +207,7 @@ Business of bags
     Password:   9A8feF7SAud5n8q
     Host:       248.56.64.118
     Port:
-    Type:       app
+    Type:       database
     Region:     canada
     Sub-region: vancouver
 
@@ -263,9 +263,9 @@ Business International of Tires
     Password:   hMabsIITUS3dpHS
     Host:       238.105.225.18
     Port:
-    Type:       japan
-    Region:     tokyo
-    Sub-region: beijing
+    Type:       app
+    Region:     japan
+    Sub-region: tokyo
 
     Full name title: Database ORACLE Master app1
     User:       root
