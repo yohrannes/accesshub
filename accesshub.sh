@@ -163,6 +163,37 @@ nodemenu(){
     declare -A selectndprt
     declare -A selectndpw
     declare -A selectndusr
+    declare -A selectndname
+
+    indexselectndhst=0
+    indexselectndprt=0
+    indexselectndpw=0
+    indexselectndusr=0
+    indexselectndname=0
+
+    for index in ${!data[@]}; do
+        if [[ "$index" == "hostid${dispntypes[$opnodetype]}"* ]]; then
+            selectndhst[$indexselectndhst]=$index
+            ((indexselectndhst++))
+        fi
+        if [[ "$index" == "portid${dispntypes[$opnodetype]}"* ]]; then
+            selectndprt[$indexselectndprt]=$index
+            ((indexselectndprt++))
+        fi
+        if [[ "$index" == "pid${dispntypes[$opnodetype]}"* ]]; then
+            selectndpw[$indexselectndpw]=$index
+            ((indexselectndpw++))
+        fi
+        if [[ "$index" == "uid${dispntypes[$opnodetype]}"* ]]; then
+            selectndusr[$indexselectndusr]=$index
+            ((indexselectndusr++))
+        fi
+        if [[ "$index" == "sid${dispntypes[$opnodetype]}"* ]]; then
+            selectndname[$indexselectndname]=$index
+            ((indexselectndname++))
+        fi
+
+    done
 
     if [ ${accessnodeop} == 1 ]; then
         clear
@@ -171,8 +202,28 @@ nodemenu(){
 
         declare -A cktypesoutput
         declare -A dispntypes
-        
-        i=0
+
+
+        echo data[${selectndname[$i]}]=${data[${selectndname[$i]}]}
+        echo
+        echo desired index sid*
+        echo desired region ${dispreg[$opregion]}
+
+        countshowregions=0
+        prev_selectndname=""
+
+        for ((i=0;i<=${#selectndname[@]};i++)); do
+            for ((a=0;a<=${#servertype[@]};a++)); do
+                if [[ "${selectndname[$i]}" == "sid${servertype[$a]}${dispreg[$opregion]}"* ]]; then
+                    if [[ "${selectndname[$i]}" != "$prev_selectndname" ]];then
+                        echo "$countshowregions - ${selectndname[$i]}"
+                        ((countshowregions++))
+                    fi
+                    prev_selectndname="${selectndname[$i]}"
+                fi
+            done
+        done
+
         for element in "${servertype[@]}"; do
             if [[ -z "${cktypesoutput[$element]}" ]]; then
                 cktypesoutput["$element"]=true
@@ -191,6 +242,7 @@ nodemenu(){
                 if [[ "$index" == "sid${dispntypes[$a]}${dispreg[$opregion]}"* ]]; then
                     echo "$countnodes - ${data[$index]}"
                     nodeselected[$countnodes]=$index
+                    echo "nodeselected["$countnodes"]="$index
                     ((countnodes++))
                 fi
                 ((a++))
@@ -212,36 +264,22 @@ nodemenu(){
             nodemenu
         fi
 
-    elif [ ${accessnodeop} == 2 ]; then
+    fi
+    
+    if [ ${accessnodeop} == 2 ]; then
         clear
         echo
         echo Disponible ${dispntypes[$opnodetype]} nodes.
         echo '---------------------'
 
         i=0
-        countndmenu=0
-        indexselectndhst=0
-        indexselectndprt=0
-        indexselectndpw=0
-        indexselectndusr=0
-        for index in ${!data[@]};do
+
+
+        for index in ${!data[@]}; do                                                                                                                  
             if [[ "$index" == "sid${dispntypes[$opnodetype]}"* ]]; then
-                echo "$countndmenu - ${data[$index]}"
-                ((countndmenu++))
-            elif [[ "$index" == "hostid${dispntypes[$opnodetype]}"* ]]; then
-                selectndhst[$indexselectndhst]=$index
-                ((indexselectndhst++))
-            elif [[ "$index" == "portid${dispntypes[$opnodetype]}"* ]]; then
-                selectndprt[$indexselectndprt]=$index
-                ((indexselectndprt++))
-            elif [[ "$index" == "pid${dispntypes[$opnodetype]}"* ]]; then
-                selectndpw[$indexselectndpw]=$index
-                ((indexselectndpw++))
-            elif [[ "$index" == "uid${dispntypes[$opnodetype]}"* ]]; then
-                selectndusr[$indexselectndusr]=$index
-                ((indexselectndusr++))
+                selectndname[$indexselectndname]=$index
+                ((indexselectndname++))
             fi
-            ((i++))
         done
 
         echo
@@ -264,14 +302,51 @@ nodemenu(){
 
 connect(){
 
-    test=$opnode
     echo "Connecting"
     echo 
-    echo "sshpass -p ${data[${selectndusr[$opnode]}]}"
-    echo "sshpass -p ${data[${selectndprt[$test]}]}"
-    echo "sshpass -p ${data[${selectndhst[$test]}]}"
-    echo "sshpass -p ${data[${selectndpw[$test]}]}"
-    read -p "-------------" vdfv
+
+    # Conetion with specifying private key
+    # sshpass -p 'mypassword' ssh -i /home/user/.ssh/id_rsa -p 2222 user@example.com
+
+    ### TASK
+    # Compare sid indexing to another indexes to found the correct one
+
+    for ((i=0;i<=${#selectndname[@]};i++)); do
+
+        for ((a=0;a<=${#selectndhst[@]};a++)); do
+
+            if [[ ${selectndhst[$a]:6} == ${selectndname[$i]:3} ]]; then
+
+                if [[ ${selectndname[$opnode]:3} == ${selectndhst[$a]:6} ]]; then
+                    echo "I found!!" ${selectndhst[$a]:6} "==" ${selectndname[$i]:3}
+                    echo
+                    echo ${data[${selectndname[$opnode]}]}
+                fi
+                # if [[ ${selectndname[$opnode]:3} == ${selectndhst[$a]:6} ]]; then
+                #     echo ${data[${selectndhst[$opnode]}]}
+                # fi
+            fi
+
+        done
+    done
+
+    echo
+    echo "nodeselected["$opnode"]="$index
+
+    echo "sshpass -p ${data[${selectndpw[$opnode]}]} ssh -p ${data[${selectndprt[$opnode]}]} ${data[${selectndusr[$opnode]}]}@${data[${selectndhst[$opnode]}]}"
+
+    read -p "Select ....:" test
+
+    nodemenu
+
+    sleep 10
+    sshpass -p ${data[${selectndpw[$opnode]}]} ssh -p ${data[${selectndprt[$opnode]}]} ${data[${selectndusr[$opnode]}]}@${data[${selectndhst[$opnode]}]}
+    echo test
+    sleep 10
+
+    nodemenu
+    
+
 
 }
 
