@@ -17,6 +17,18 @@ source ./.sourcedata/userpassword.conf
 
 echo Script started in "$(date)" >> /var/log/accesshub.log from user "$(whoami)"
 
+if ! command -v sshpass &> /dev/null; then
+        echo "Installing sshpass"
+        if command -v apt &> /dev/null; then
+            sudo apt-get install -y sshpass
+            elif command -v yum &> /dev/null; then
+            sudo yum install -y sshpass
+            else
+            echo "Failed, you need to install sshpass manually"
+            exit 1
+        fi
+fi
+
 loading() {
 contload=0
 while [ "$contload" -lt 20 ]; do
@@ -110,7 +122,7 @@ regionmenu() {
     done
 
     echo
-    read -p "Select the respective value of the region you would like to access [Press v to go back]:" opregion
+    read -p "Select the value of the region you would like to access [Press v to go back]:" opregion
 
     if [ -n "$opregion" ] && { [ "$opregion" = "v" ] || [ "$opregion" = "V" ]; }; then
         accessnodemenu
@@ -143,7 +155,7 @@ typemenu(){
     done
 
     echo
-    read -p "Select the respective value of the node type you would like to access [Press v to go back]:" opnodetype
+    read -p "Select the value of the node type you would like to access [Press v to go back]:" opnodetype
 
     if [ -n "$opnodetype" ] && { [ "$opnodetype" = "v" ] || [ "$opnodetype" = "V" ]; }; then
         accessnodemenu
@@ -200,15 +212,6 @@ nodemenu(){
         echo Disponible nodes on ${dispreg[$opregion]}
         echo '---------------------'
 
-        declare -A cktypesoutput
-        declare -A dispntypes
-
-
-        echo data[${selectndname[$i]}]=${data[${selectndname[$i]}]}
-        echo
-        echo desired index sid*
-        echo desired region ${dispreg[$opregion]}
-
         countshowregions=0
         prev_selectndname=""
 
@@ -216,7 +219,7 @@ nodemenu(){
             for ((a=0;a<=${#servertype[@]};a++)); do
                 if [[ "${selectndname[$i]}" == "sid${servertype[$a]}${dispreg[$opregion]}"* ]]; then
                     if [[ "${selectndname[$i]}" != "$prev_selectndname" ]];then
-                        echo "$countshowregions - ${selectndname[$i]}"
+                        echo "$countshowregions - ${data[${selectndname[$i]}]}"
                         ((countshowregions++))
                     fi
                     prev_selectndname="${selectndname[$i]}"
@@ -224,34 +227,8 @@ nodemenu(){
             done
         done
 
-        for element in "${servertype[@]}"; do
-            if [[ -z "${cktypesoutput[$element]}" ]]; then
-                cktypesoutput["$element"]=true
-                dispntypes["$i"]=$element
-                ((i++))
-            fi
-        done
-
         echo
-
-        i=0
-        countnodes=0
-        for index in ${!data[@]}; do
-            a=0
-            for typeindex in ${!dispntypes[@]}; do
-                if [[ "$index" == "sid${dispntypes[$a]}${dispreg[$opregion]}"* ]]; then
-                    echo "$countnodes - ${data[$index]}"
-                    nodeselected[$countnodes]=$index
-                    echo "nodeselected["$countnodes"]="$index
-                    ((countnodes++))
-                fi
-                ((a++))
-            done
-            ((i++))
-        done
-
-        echo
-        read -p "Select the respective value of the node you would like to access [Press v to go back]:" opnode
+        read -p "Select the value of the node you would like to access [Press v to go back]:" opnode
 
         if [ -n "$opnode" ] && { [ "$opnode" = "v" ] || [ "$opnode" = "V" ]; }; then
             regionmenu
@@ -272,29 +249,34 @@ nodemenu(){
         echo Disponible ${dispntypes[$opnodetype]} nodes.
         echo '---------------------'
 
-        i=0
+        countshowntypes=0
+        prev_selectndname=""
 
-
-        for index in ${!data[@]}; do                                                                                                                  
-            if [[ "$index" == "sid${dispntypes[$opnodetype]}"* ]]; then
-                selectndname[$indexselectndname]=$index
-                ((indexselectndname++))
-            fi
+        for ((i=0;i<=${#selectndname[@]};i++)); do
+            for ((a=0;a<=${#servertype[@]};a++)); do
+                if [[ "${selectndname[$i]}" == "sid${dispntypes[$opnodetype]}"* ]]; then
+                    if [[ "${selectndname[$i]}" != "$prev_selectndname" ]];then
+                        echo "$countshowntypes - ${data[${selectndname[$i]}]}"
+                        ((countshowntypes++))
+                    fi
+                    prev_selectndname="${selectndname[$i]}"
+                fi
+            done
         done
 
-        echo
-        read -p "Select the respective value of the node you would like to access [Press v to go back]:" opnode
+         echo
+         read -p "Select the value of the node you would like to access [Press v to go back]:" opnode
 
-        if [ -n "$opnode" ] && { [ "$opnode" = "v" ] || [ "$opnode" = "V" ]; }; then
-            typemenu
-        elif [ -n "$opnode" ] && [[ $opnode =~ ^[0-9]+$ ]]; then
-            connect
-        else
-            echo "Wrong value"
-            sleep 1
-            loading
-            nodemenu
-        fi
+         if [ -n "$opnode" ] && { [ "$opnode" = "v" ] || [ "$opnode" = "V" ]; }; then
+             typemenu
+         elif [ -n "$opnode" ] && [[ $opnode =~ ^[0-9]+$ ]]; then
+             connect
+         else
+             echo "Wrong value"
+             sleep 1
+             loading
+             nodemenu
+         fi
 
     fi
 
@@ -308,34 +290,27 @@ connect(){
     # Conetion with specifying private key
     # sshpass -p 'mypassword' ssh -i /home/user/.ssh/id_rsa -p 2222 user@example.com
 
-    ### TASK
-    # Compare sid indexing to another indexes to found the correct one
+    countshowregions=0
+    prev_selectndname=""
 
     for ((i=0;i<=${#selectndname[@]};i++)); do
-
-        for ((a=0;a<=${#selectndhst[@]};a++)); do
-
-            if [[ ${selectndhst[$a]:6} == ${selectndname[$i]:3} ]]; then
-
-                if [[ ${selectndname[$opnode]:3} == ${selectndhst[$a]:6} ]]; then
-                    echo "I found!!" ${selectndhst[$a]:6} "==" ${selectndname[$i]:3}
-                    echo
-                    echo ${data[${selectndname[$opnode]}]}
+        for ((a=0;a<=${#servertype[@]};a++)); do
+            if [[ "${selectndname[$i]}" == "sid${servertype[$a]}${dispreg[$opregion]}"* ]]; then
+                if [[ "${selectndname[$i]}" != "$prev_selectndname" ]];then
+                    if [[ $opnode == $countshowregions ]]; then
+                        echo "Node selected $countshowregions - ${data[${selectndname[$i]}]} - ${selectndname[$i]}"
+                        nodeindexselected="${selectndname[$i]:3}"
+                    fi
+                    ((countshowregions++))
                 fi
-                # if [[ ${selectndname[$opnode]:3} == ${selectndhst[$a]:6} ]]; then
-                #     echo ${data[${selectndhst[$opnode]}]}
-                # fi
+                prev_selectndname="${selectndname[$i]}"
             fi
-
         done
     done
 
-    echo
-    echo "nodeselected["$opnode"]="$index
+    clear
 
-    echo "sshpass -p ${data[${selectndpw[$opnode]}]} ssh -p ${data[${selectndprt[$opnode]}]} ${data[${selectndusr[$opnode]}]}@${data[${selectndhst[$opnode]}]}"
-
-    read -p "Select ....:" test
+    sshpass -p ${data["pid$nodeindexselected"]} ssh -p ${data["portid$nodeindexselected"]} ${data["uid$nodeindexselected"]}@${data["hostid$nodeindexselected"]}
 
     nodemenu
 
@@ -345,12 +320,10 @@ connect(){
     sleep 10
 
     nodemenu
-    
-
 
 }
 
-function newserver {
+newserver() {
 
 trap '' 2 # disable Ctrl+C, dont change that if you don't want problems....
 
@@ -486,7 +459,6 @@ trap '' 2 # disable Ctrl+C, dont change that if you don't want problems....
             clear
             serversubregion
         fi
-
     }
 
     fullname
