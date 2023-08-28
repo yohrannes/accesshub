@@ -1,2 +1,12 @@
-# cloud-management
-Project in shell-script who consists in access and manage multiple linux servers in a private network.
+# AccessHub
+
+* Access multiple linux host's in a public or a private network.
+* Save several clicks accessing your servers by only one script than browsing different layouts of different platforms.
+* Register all your host servers in just one shell program.
+* Designed for all of type of business who have too many linux host's to manage.
+* Organize all of them with server type's and region.
+* Use password or private ssh key's to access.
+* All with easy usability and security.
+
+
+
