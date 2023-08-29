@@ -288,7 +288,7 @@ connect(){
     echo 
 
     # Conetion with specifying private key
-    # sshpass -p 'mypassword' ssh -i /home/user/.ssh/id_rsa -p 2222 user@example.com
+    # sshpass -p 'mypassword' ssh -i ~/.ssh/id_rsa.pub -p 2222 user@example.com
 
     countshowregions=0
     prev_selectndname=""
