@@ -233,7 +233,7 @@ nodemenu(){
         if [ -n "$opnode" ] && { [ "$opnode" = "v" ] || [ "$opnode" = "V" ]; }; then
             regionmenu
         elif [ -n "$opnode" ] && [[ $opnode =~ ^[0-9]+$ ]]; then
-            connect
+            connectwithpassword
         else
             echo "Wrong value"
             sleep 1
@@ -270,7 +270,7 @@ nodemenu(){
          if [ -n "$opnode" ] && { [ "$opnode" = "v" ] || [ "$opnode" = "V" ]; }; then
              typemenu
          elif [ -n "$opnode" ] && [[ $opnode =~ ^[0-9]+$ ]]; then
-             connect
+             connectwithpassword
          else
              echo "Wrong value"
              sleep 1
@@ -282,13 +282,10 @@ nodemenu(){
 
 }
 
-connect(){
+connectwithpassword(){
 
     echo "Connecting"
-    echo 
-
-    # Conetion with specifying private key
-    # sshpass -p 'mypassword' ssh -i ~/.ssh/id_rsa.pub -p 2222 user@example.com
+    echo
 
     countshowregions=0
     prev_selectndname=""
@@ -314,38 +311,11 @@ connect(){
 
     nodemenu
 
-    sleep 10
-    sshpass -p ${data[${selectndpw[$opnode]}]} ssh -p ${data[${selectndprt[$opnode]}]} ${data[${selectndusr[$opnode]}]}@${data[${selectndhst[$opnode]}]}
-    echo test
-    sleep 10
-
-    nodemenu
-
 }
 
 newserver() {
 
-trap '' 2 # disable Ctrl+C, dont change that if you don't want problems....
-
-    # Variables used for organize thse access data
-    # data[A - A contains sid,uid,pid,hostid,portid
-
-    # sid = Server name
-    # uid = Server user
-    # pid = Server password
-    # hostid = Server ip
-    # portid = Server port
-    
-    # Variables for filter the server type and region
-
-    # data[AB - B contains typeid (backup, app, balancer, infra)
-    # data[ABC - C contains regionid
-    # data[ABCDN] - D contains sbregionid
-    # data[ABCDN] - N contains the id number in case of duplicate indexing
-
-    # typeid = Server type
-    # regionid = Server region (Coutry or other, it depends of your business reach)
-    # sbregionid = Server sub-region (State or other)
+trap '' 2
 
     fullname(){
         read -r -p "Full name title, [Press v to go back]:" sid
