@@ -43,7 +43,7 @@ done
 }
 
 mainmenu() {
-trap 2 # enable Ctrl+C
+trap 2 # enabling Ctrl+C
 clear
 echo -e '
 ==============================================
