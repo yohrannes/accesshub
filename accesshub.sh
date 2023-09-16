@@ -316,7 +316,7 @@ connect(){
 
 newserver() {
 
-trap '' 2 # disable Ctrl+C, dont change that if you don't want problems....
+# trap '' 2 # disable Ctrl+C, dont change that if you don't want problems....
 
     # Variables used for organize thse access data
     # data[A - A contains sid,uid,pid,hostid,portid
@@ -367,17 +367,18 @@ trap '' 2 # disable Ctrl+C, dont change that if you don't want problems....
     }
 
     connectmethod(){
-        read -r -p "How you want to connect? [Press v to go back]" pid
-        echo
-        echo "[1] - To connect from password"
-        echo "[2] - To connect from private key"
-        echo
-        read -r -p "Connection method:" connectop
+        echo "[1] Password."
+        echo "[2] Private key file."
+        read -r -p "How you want to connect? [Press v to go back]:" connectop
         if [ "$connectop" == "1" ] && { [ "$pid" = "v" ] || [ "$pid" = "V" ]; }; then
             password
         elif [ "$connectop" == "2" ]; then
-            echo "Parou na chave privada...."
-            sleep 5
+            privatekeyfile
+        elif ! [[ $connectop =~ ^[1-2]+$ ]];then
+            connectmethod
+        elif [ -z "$connectop" ]; then
+            clear
+            connectmethod
         else
             hostaddress
         fi
@@ -390,6 +391,18 @@ trap '' 2 # disable Ctrl+C, dont change that if you don't want problems....
         elif [ -z "$pid" ]; then
             clear
             password
+        else
+            hostaddress
+        fi
+    }
+
+    privatekeyfile(){
+    read -r -p "Paste your key file (default ~/.ssh/id_rsa.pub) [Press v to go back]:" keyfile
+        if [ "$keyfile" = "v" ] || [ "$keyfile" = "V" ]; then
+            connectmethod
+        elif [ -z "$keyfile" ]; then
+            clear
+            privatekeyfile
         else
             hostaddress
         fi
@@ -513,6 +526,8 @@ trap '' 2 # disable Ctrl+C, dont change that if you don't want problems....
     data["uid$typeid$regionid$sbregionid$uidtotal"]=$uid
     echo "data[pid$typeid$regionid$sbregionid$pidtotal]='$pid'" >> ./.sourcedata/userpassword.conf
     data["pid$typeid$regionid$sbregionid$pidtotal"]=$pid
+    echo "data[keyfile$typeid$regionid$sbregionid$pidtotal]='$keyfile'" >> ./.sourcedata/keyfiles.conf
+    data["keyfile$typeid$regionid$sbregionid$pidtotal"]=$keyfile
     echo "data[hostid$typeid$regionid$sbregionid$hostidtotal]='$hostid'" >> ./.sourcedata/hostaddress.conf
     data["hostid$typeid$regionid$sbregionid$hostidtotal"]=$hostid
     echo "data[portid$typeid$regionid$sbregionid$portidtotal]='$portid'" >> ./.sourcedata/hostports.conf
