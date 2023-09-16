@@ -283,13 +283,6 @@ nodemenu(){
 }
 
 connect(){
-
-    echo "Connecting"
-    echo 
-
-    # Conetion with specifying private key
-    # sshpass -p 'mypassword' ssh -i ~/.ssh/id_rsa.pub -p 2222 user@example.com
-
     countshowregions=0
     prev_selectndname=""
 
@@ -310,14 +303,12 @@ connect(){
 
     clear
 
+    # Conetion with specifying private key
+    # sshpass -p 'mypassword' ssh -i ~/.ssh/id_rsa.pub -p 2222 user@example.com
+
     sshpass -p ${data["pid$nodeindexselected"]} ssh -p ${data["portid$nodeindexselected"]} ${data["uid$nodeindexselected"]}@${data["hostid$nodeindexselected"]}
 
-    nodemenu
-
-    sleep 10
-    sshpass -p ${data[${selectndpw[$opnode]}]} ssh -p ${data[${selectndprt[$opnode]}]} ${data[${selectndusr[$opnode]}]}@${data[${selectndhst[$opnode]}]}
-    echo test
-    sleep 10
+    # sshpass -p ${data[${selectndpw[$opnode]}]} ssh -p ${data[${selectndprt[$opnode]}]} ${data[${selectndusr[$opnode]}]}@${data[${selectndhst[$opnode]}]}
 
     nodemenu
 
@@ -371,14 +362,31 @@ trap '' 2 # disable Ctrl+C, dont change that if you don't want problems....
             echo "Wrong value detected"
             serveruser
         else
+            connectmethod
+        fi
+    }
+
+    connectmethod(){
+        read -r -p "How you want to connect? [Press v to go back]" pid
+        echo
+        echo "[1] - To connect from password"
+        echo "[2] - To connect from private key"
+        echo
+        read -r -p "Connection method:" connectop
+        if [ "$connectop" == "1" ] && { [ "$pid" = "v" ] || [ "$pid" = "V" ]; }; then
             password
+        elif [ "$connectop" == "2" ]; then
+            echo "Parou na chave privada...."
+            sleep 5
+        else
+            hostaddress
         fi
     }
 
     password(){
     read -r -p "Password [Press v to go back]:" pid
         if [ -n "$pid" ] && { [ "$pid" = "v" ] || [ "$pid" = "V" ]; }; then
-            serveruser
+            connectmethod
         elif [ -z "$pid" ]; then
             clear
             password
