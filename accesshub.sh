@@ -176,12 +176,14 @@ nodemenu(){
     declare -A selectndpw
     declare -A selectndusr
     declare -A selectndname
+    declare -A selectkeyfiledir
 
     indexselectndhst=0
     indexselectndprt=0
     indexselectndpw=0
     indexselectndusr=0
     indexselectndname=0
+    indexselectkeyfiledir=0
 
     for index in ${!data[@]}; do
         if [[ "$index" == "hostid${dispntypes[$opnodetype]}"* ]]; then
@@ -203,6 +205,10 @@ nodemenu(){
         if [[ "$index" == "sid${dispntypes[$opnodetype]}"* ]]; then
             selectndname[$indexselectndname]=$index
             ((indexselectndname++))
+        fi
+        if [[ "$index" == "keyfile${dispntypes[$opnodetype]}"* ]]; then
+            selectkeyfiledir[$indexselectkeyfiledir]=$index
+            ((indexselectkeyfiledir++))
         fi
 
     done
@@ -308,8 +314,6 @@ connect(){
 
     sshpass -p ${data["pid$nodeindexselected"]} ssh -p ${data["portid$nodeindexselected"]} ${data["uid$nodeindexselected"]}@${data["hostid$nodeindexselected"]}
 
-    # sshpass -p ${data[${selectndpw[$opnode]}]} ssh -p ${data[${selectndprt[$opnode]}]} ${data[${selectndusr[$opnode]}]}@${data[${selectndhst[$opnode]}]}
-
     nodemenu
 
 }
@@ -397,7 +401,7 @@ newserver() {
     }
 
     privatekeyfile(){
-    read -r -p "Paste your key file (default ~/.ssh/id_rsa.pub) [Press v to go back]:" keyfile
+    read -r -p "Paste your key file directory (example: ~/.ssh/id_rsa.pub) [Press v to go back]:" keyfile
         if [ "$keyfile" = "v" ] || [ "$keyfile" = "V" ]; then
             connectmethod
         elif [ -z "$keyfile" ]; then
@@ -499,6 +503,7 @@ newserver() {
     pidtotal=0
     hostidtotal=0
     portidtotal=0
+    keyfiletotal=0
 
     for a in "${!data[@]}"; do # Check duplicate indexes...
         for ((i=0;i<=${#data[@]};i++)); do
@@ -516,6 +521,9 @@ newserver() {
             fi
             if [[ "portid$typeid$regionid$sbregionid$i" == $a ]]; then
                 ((portidtotal++))
+            fi
+            if [[ "keyfile$typeid$regionid$sbregionid$i" == $a ]]; then
+                ((keyfiletotal++))
             fi
         done
     done
