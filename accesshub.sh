@@ -14,6 +14,8 @@ source ./.sourcedata/hostaddress.conf
 source ./.sourcedata/hostports.conf
 source ./.sourcedata/userdata.conf
 source ./.sourcedata/userpassword.conf
+source ./.sourcedata/keyfiles.conf
+
 
 echo Script started in "$(date)" >> /var/log/accesshub.log from user "$(whoami)"
 
@@ -54,7 +56,7 @@ echo -e '
 =============================================='
 echo ""
 echo "[1] Access Node" 
-echo "[2] New node."
+echo "[2] Manage nodes."
 echo "[e] Exit."
 echo ''
 echo ''
@@ -66,7 +68,7 @@ read -p "Enter the desired option: " op
 
 case ${op} in
 1) clear; accessnodemenu;;
-2) clear; newserver;;
+2) clear; nodemanager;;
 e) clear; exit;;
 E) clear; exit;;
 *)
@@ -94,6 +96,7 @@ accessnodemenu(){
     1) clear; regionmenu;;
     2) clear; typemenu;;
     b) clear; mainmenu;;
+    B) clear; mainmenu;;
     *)
         clear
         loading
@@ -261,7 +264,7 @@ nodemenu(){
         for ((i=0;i<=${#selectndname[@]};i++)); do
             for ((a=0;a<=${#servertype[@]};a++)); do
                 if [[ "${selectndname[$i]}" == "sid${dispntypes[$opnodetype]}"* ]]; then
-                    if [[ "${selectndname[$i]}" != "$prev_selectndname" ]];then
+                    if [[ "${selectndname[$i]}" != "$prev_selectndname" ]]; then
                         echo "$countshowntypes - ${data[${selectndname[$i]}]}"
                         ((countshowntypes++))
                     fi
@@ -310,19 +313,48 @@ connect(){
     clear
 
     # Conetion with specifying private key
-    # sshpass -p 'mypassword' ssh -i ~/.ssh/id_rsa.pub -p 2222 user@example.com
+    # sshpass -p 'mypassword' ssh -i ~/.ssh/id_rsa -p 2222 user@example.com
+    # U
 
-    sshpass -p ${data["pid$nodeindexselected"]} ssh -p ${data["portid$nodeindexselected"]} ${data["uid$nodeindexselected"]}@${data["hostid$nodeindexselected"]}
+    if [ "${data["keyfile$nodeindexselected"]}" == "" ]; then
+        sshpass -p ${data["pid$nodeindexselected"]} ssh -p ${data["portid$nodeindexselected"]} ${data["uid$nodeindexselected"]}@${data["hostid$nodeindexselected"]} 2>&1
+    else
+        ssh ${data["uid$nodeindexselected"]}@${data["hostid$nodeindexselected"]} -p ${data["portid$nodeindexselected"]} 2>&1
+    fi
 
     nodemenu
 
 }
 
+nodemanager() {
+
+    echo '[1] New node'
+    echo '[2] Delete node'
+    echo '[3] Find node'
+    echo '[b] Go back'
+    echo
+    echo
+    read -p 'Select the desired option:' managerop
+    case ${managerop} in
+    1) clear; newserver;;
+    2) clear; deleteserver;;
+    3) clear; findsersver;;
+    b) clear; mainmenu;;
+    B) clear; mainmenu;;
+    *)
+        clear
+        loading
+        mainmenu
+    ;;
+    esac
+
+}
+
 newserver() {
 
-# trap '' 2 # disable Ctrl+C, dont change that if you don't want problems....
+trap '' 2 # disabling Ctrl+C, dont change that if you don't want problems...
 
-    # Variables used for organize thse access data
+    # Indexing used for organize the access data
     # data[A - A contains sid,uid,pid,hostid,portid
 
     # sid = Server name
@@ -331,7 +363,7 @@ newserver() {
     # hostid = Server ip
     # portid = Server port
     
-    # Variables for filter the server type and region
+    # Indexation method for filter the server type and region
 
     # data[AB - B contains typeid (backup, app, balancer, infra)
     # data[ABC - C contains regionid
@@ -346,7 +378,7 @@ newserver() {
         read -r -p "Full name title, [Press v to go back]:" sid
         if [ -n "$sid" ] && { [ "$sid" = "v" ] || [ "$sid" = "V" ]; }; then
             clear
-            mainmenu
+            nodemanager
         elif [ -z "$sid" ]; then
             clear
             fullname
@@ -374,7 +406,10 @@ newserver() {
         echo "[1] Password."
         echo "[2] Private key file."
         read -r -p "How you want to connect? [Press v to go back]:" connectop
-        if [ "$connectop" == "1" ] && { [ "$pid" = "v" ] || [ "$pid" = "V" ]; }; then
+        
+        if [ -n "$connectop" ] && { [ "$connectop" = "v" ] || [ "$connectop" = "V" ]; }; then
+            serveruser 
+        elif [ "$connectop" == "1" ]; then
             password
         elif [ "$connectop" == "2" ]; then
             privatekeyfile
@@ -445,10 +480,10 @@ newserver() {
     }
     
     servertype(){
-        read -r -p "Server type [Press v to go back]: " typeid
+        read -r -p "Server type (lowercase) [Press v to go back]: " typeid
         if [ -n "$typeid" ] && { [ "$typeid" = "v" ] || [ "$typeid" = "V" ]; }; then
             port
-        elif [[ $typeid =~ [A-Z] ]]; then
+        elif [[ "$typeid" =~ [A-Z] || "$typeid" == *" "* ]]; then
             echo "Wrong value detected"
             servertype
         elif [ -z "$typeid" ]; then
@@ -460,13 +495,13 @@ newserver() {
     }
 
     serverregion(){
-        read -r -p "Server region [Press v to go back]: " regionid
+        read -r -p "Server region (lowercase) [Press v to go back]: " regionid
         if [ -n "$regionid" ] && { [ "$regionid" = "v" ] || [ "$regionid" = "V" ]; }; then
             servertype
         elif [ -z "$regionid" ];then
             clear
             serverregion
-        elif [[ $regionid =~ [A-Z] ]]; then
+        elif [[ "$regionid" =~ [A-Z] || "$regionid" == *" "* ]]; then
             echo "Wrong value detected"
         else
             serversubregion
@@ -474,16 +509,52 @@ newserver() {
     }
 
     serversubregion(){
-        read -r -p "Server sub-region [Press v to go back]: " sbregionid
+        read -r -p "Server sub-region (lowercase) [Press v to go back]: " sbregionid
         if [ -n "$sbregionid" ] && { [ "$sbregionid" = "v" ] || [ "$sbregionid" = "V" ]; }; then
         serverregion
-        elif [[ $sbregionid =~ [A-Z] ]]; then
+        elif [[ "$sbregionid" =~ [A-Z] || "$sbregionid" == *" "* ]]; then
             echo "Wrong value detected"
             serversubregion
         elif [ -z "$sbregionid" ];then
             clear
             serversubregion
+        else
+            checkdata
         fi
+    }
+
+    checkdata(){
+        while true ;do
+            echo 'Server informations:'
+            echo
+            echo 'Server name:' $sid
+            echo 'User:' $uid
+            echo 'Host:' $hostid
+            echo 'Port:' $portid
+            if [ $connectop == 1 ];then
+                echo 'Password:' $pid
+            elif [ $connectop == 2 ]; then
+                echo 'Key file directory:' $keyfile
+            fi
+            echo 'Server type:' $typeid
+            echo 'Server region:' $regionid
+            echo 'Server sub-region:' $sbregionid
+            echo
+            read -r -p "Confirm data? [y/n] [Press v to back to main menu]: " recheckdata
+            if [ -n "$recheckdata" ] && { [ "$recheckdata" = "v" ] || [ "$recheckdata" = "V" ]; }; then
+                clear
+                mainmenu
+            elif [[ $recheckdata == [yY] ]]; then
+                clear
+                loading
+                mainmenu
+            elif [[ $recheckdata == [nN] ]]; then
+                clear
+                newserver
+            else
+                mainmenu
+            fi
+        done
     }
 
     fullname
@@ -540,19 +611,6 @@ newserver() {
     data["hostid$typeid$regionid$sbregionid$hostidtotal"]=$hostid
     echo "data[portid$typeid$regionid$sbregionid$portidtotal]='$portid'" >> ./.sourcedata/hostports.conf
     data["portid$typeid$regionid$sbregionid$portidtotal"]=$portid
-
-    moredata(){
-        while true ;do
-            read -r -p "Would you like to add more data? [y/n]: " moredata
-            if [[ $moredata == [yY] ]]; then
-                clear
-                newserver
-            else
-                mainmenu
-            fi
-        done
-    }
-    moredata
 
 }
 
