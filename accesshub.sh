@@ -322,10 +322,8 @@ connect(){
 
     if [ "${data["keyfile$nodeindexselected"]}" == "" ]; then
         echo sshpass -p ${data["pid$nodeindexselected"]} ssh -p ${data["portid$nodeindexselected"]} ${data["uid$nodeindexselected"]}@${data["hostid$nodeindexselected"]} 2>&1
-        read -p 'teste' teste
     else
         ssh -i ${data["keyfile$nodeindexselected"]} ${data["uid$nodeindexselected"]}@${data["hostid$nodeindexselected"]} -p ${data["portid$nodeindexselected"]} 2>&1
-        read -p 'teste' teste
     fi
 
     nodemenu
