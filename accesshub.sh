@@ -86,42 +86,47 @@ while [ "$contload" -lt 20 ]; do
 done
 }
 
-mainmenu() {
-trap 2 # enabling Ctrl+C
-clear
-echo -e '
-==============================================
-    ____ ____ ____ \e[32m____ ____ _  _\e[0m _  _ ___  
-    |__| |    |___ \e[32m[__  [__  |__|\e[0m |  | |__] 
-    |  | |___ |___ \e[32m___] ___] |  |\e[0m |__| |__] 
-                                            
-=============================================='
-echo ""
-echo "[1] Access Node."
-echo "[2] Manage nodes."
-echo "[q] Quit."
-echo ''
-echo ''
-echo ''
-echo ''
-echo ''
-echo ''
-read -p "Enter the desired option: " op
-
-case ${op} in
-1) clear; accessnodemenu;;
-2) clear; nodemanager;;
-q) clear; exit;;
-Q) clear; exit;;
-*)
+logo() {
+    trap 2 # enabling Ctrl+C
     clear
-    mainmenu
-;;
-esac
+    echo -e '
+    ==============================================
+        ____ ____ ____ \e[32m____ ____ _  _\e[0m _  _ ___  
+        |__| |    |___ \e[32m[__  [__  |__|\e[0m |  | |__] 
+        |  | |___ |___ \e[32m___] ___] |  |\e[0m |__| |__] 
+                                                
+    =============================================='
+    echo ""
+}
+
+mainmenu() {
+    echo "[1] Access Node."
+    echo "[2] Manage nodes."
+    echo "[q] Quit."
+    echo 
+    echo 
+    echo 
+    echo 
+    echo 
+    echo 
+    read -p "Enter the desired option: " op
+
+    case ${op} in
+    1) clear; accessnodemenu;;
+    2) clear; nodemanager;;
+    q) clear; exit;;
+    Q) clear; exit;;
+    *)
+        clear
+        logo
+        mainmenu
+    ;;
+    esac
 }
 
 accessnodemenu(){
     clear
+    logo
     echo 'Select node from:'
     echo
     echo '[1] Node Region.'
@@ -131,15 +136,13 @@ accessnodemenu(){
     echo ''
     echo ''
     echo ''
-    echo ''
-    echo ''
     read -p "Enter the desired option: " accessnodeop
 
     case $accessnodeop in
     1) clear; regionmenu;;
     2) clear; typemenu;;
-    b) clear; mainmenu;;
-    B) clear; mainmenu;;
+    b) clear; logo; mainmenu;;
+    B) clear; logo; mainmenu;;
     *)
         clear
         accessnodemenu
@@ -253,7 +256,7 @@ nodemenu(){
         fi
 
     fi
-    
+
     if [ ${accessnodeop} == 2 ]; then
         clear
         echo
@@ -275,19 +278,19 @@ nodemenu(){
             done
         done
 
-         echo
-         read -p "Select the value of the node you would like to access, Go back [b]:" opnode
+        echo
+        read -p "Select the value of the node you would like to access, Go back [b]:" opnode
 
-         if [ -n "$opnode" ] && { [ "$opnode" = "b" ] || [ "$opnode" = "B" ]; }; then
-             typemenu
-         elif [ -n "$opnode" ] && [[ $opnode =~ ^[0-9]+$ ]]; then
-             connect
-         else
-             echo "Wrong value"
-             sleep 1
-             loading
-             nodemenu
-         fi
+        if [ -n "$opnode" ] && { [ "$opnode" = "b" ] || [ "$opnode" = "B" ]; }; then
+            typemenu
+        elif [ -n "$opnode" ] && [[ $opnode =~ ^[0-9]+$ ]]; then
+            connect
+        else
+            echo "Wrong value"
+            sleep 1
+            loading
+            nodemenu
+        fi
 
     fi
 
@@ -331,11 +334,11 @@ connect(){
 
 nodemanager() {
 
+    logo
     echo '[1] New node'
     echo '[2] Delete node'
     echo '[3] Find node'
     echo '[b] Go back'
-    echo
     echo
     echo
     echo
@@ -346,8 +349,8 @@ nodemanager() {
     1) clear; newserver;;
     2) clear; deleteserver;;
     3) clear; findsersver;;
-    b) clear; mainmenu;;
-    B) clear; mainmenu;;
+    b) clear; logo; mainmenu;;
+    B) clear; logo; mainmenu;;
     *)
         clear
         nodemanager
@@ -361,6 +364,7 @@ deleteserver () {
     sleep 5
     read -p 'Screen in maintenance...'
     loading
+    logo
     mainmenu
 }
 
@@ -369,6 +373,7 @@ findsersver () {
     sleep 5
     read -p 'Screen in maintenance...'
     loading
+    logo
     mainmenu
 }
 
@@ -458,15 +463,13 @@ newserver() {
         elif [ "$connectop" == "2" ]; then
             clear
             privatekeyfile(){
-                read -r -p "Paste your key file directory (example: ~/.ssh/id_rsa.pub), Go back [b]:" keyfile
+                read -r -p "Paste your key file directory (example: ~/.ssh/id_rsa), Go back [b]:" keyfile
                 if [ "$keyfile" = "b" ] || [ "$keyfile" = "B" ]; then
                 clear
                     connectmethod
                 elif [ -z "$keyfile" ]; then
-                    echo "No value detected"
-                    sleep 3
+                    keyfile="~/.ssh/id_rsa"
                     clear
-                    privatekeyfile
                 else
                     clear
                 fi
@@ -493,7 +496,7 @@ newserver() {
         read -r -p "Host (lower case), Go back [b]: " hostid
         if [ -n "$hostid" ] && { [ "$hostid" = "b" ] || [ "$hostid" = "B" ]; }; then
             clear
-            password
+            connectmethod
         elif [ -z "$hostid" ]; then
             echo "No value detected"
             sleep 3
@@ -503,7 +506,7 @@ newserver() {
             echo "Wrong value detected (upper case)"
             sleep 3
             clear
-            serveruser
+            hostaddress
         else
             clear
         fi
@@ -520,7 +523,6 @@ newserver() {
             if [ -z "$portid" ]; then
                 portid=22
                 clear
-                servertype
             else
                 echo "Wrong value detected, just numbers"
                 sleep 3
@@ -602,6 +604,7 @@ newserver() {
 
     checkdata(){
         showserverinfo(){
+            logo
             serverinfordataops=''
             echo 'Server informations:'
             echo
@@ -623,15 +626,14 @@ newserver() {
         read -r -p "Confirm? [y], Wrong values [n], Go back [b]: " recheckdata
         if [ -n "$recheckdata" ] && { [ "$recheckdata" = "b" ] || [ "$recheckdata" = "B" ]; }; then
             clear
-            nodemanager
         elif [[ $recheckdata == [yY] ]]; then
             clear
             loading
-            addnodedata
         elif [[ $recheckdata == [nN] ]]; then
             for ((i=0;i<=8;i++)); do
                 ((serverinfordataops[$i]=$i))
             done
+            clear
             showserverinfo
             serverinfordataops=''
             read -r -p "Select the option for the data you want to change [1,2,3...], Go back [b]:" changeserverdata
@@ -741,6 +743,9 @@ newserver() {
 
     }
 
+    addnodedata
+
 }
 
+logo
 mainmenu
