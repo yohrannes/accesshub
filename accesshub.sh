@@ -333,9 +333,9 @@ nodemanager() {
 
     logo
     echo '[1] New node'
-    echo '[2] Delete node'
-    echo '[3] Find node'
+    echo '[2] Change node data'
     echo '[b] Go back'
+    echo 
     echo
     echo
     echo
@@ -344,8 +344,7 @@ nodemanager() {
     read -p 'Select the desired option:' managerop
     case ${managerop} in
     1) clear; newserver;;
-    2) clear; deleteserver;;
-    3) clear; findsersver;;
+    2) clear; changeserverinfo;;
     b) clear; logo; mainmenu;;
     B) clear; logo; mainmenu;;
     *)
@@ -354,24 +353,6 @@ nodemanager() {
     ;;
     esac
 
-}
-
-deleteserver () {
-    echo 'Deleting server ....'
-    sleep 5
-    read -p 'Screen in maintenance...'
-    loading
-    logo
-    mainmenu
-}
-
-findsersver () {
-    echo 'Searching server ....'
-    sleep 5
-    read -p 'Screen in maintenance...'
-    loading
-    logo
-    mainmenu
 }
 
 newserver() {
@@ -649,61 +630,66 @@ newserver() {
                 clear
                 loading
             elif [[ $recheckdata == [nN] ]]; then
-                for ((i=0;i<=8;i++)); do
-                    ((serverinfordataops[$i]="$i"))
-                done
-                showserverinfo
-                read -r -p "Select the option for the data you want to change [1,2,3...], Go back [b]:" changeserverdata
-                if [ -n "$recheckdata" ] && { [ "$recheckdata" = "b" ] || [ "$recheckdata" = "B" ]; }; then
-                    clear
+                changeserverinfo(){
+                    for ((i=0;i<=8;i++)); do
+                        ((serverinfordataops[$i]="$i"))
+                    done
                     showserverinfo
-                    confirm
-                elif [[ "$changeserverdata" == "0" ]]; then
-                    fullname
-                    clear
-                    showserverinfo
-                    confirm
-                elif [[ "$changeserverdata" == "1" ]]; then
-                    serveruser
-                    clear
-                    showserverinfo
-                    confirm
-                elif [[ "$changeserverdata" == "2" ]]; then
-                    hostaddress
-                    clear
-                    showserverinfo
-                    confirm
-                elif [[ "$changeserverdata" == "3" ]]; then
-                    port
-                    clear
-                    showserverinfo
-                    confirm
-                elif [[ "$changeserverdata" == "4" ]]; then
-                    password
-                    clear
-                    showserverinfo
-                    confirm
-                elif [[ "$changeserverdata" == "5" ]]; then
-                    privatekeyfile
-                    clear
-                    showserverinfo
-                    confirm
-                elif [[ "$changeserverdata" == "6" ]]; then
-                    servertype
-                    clear
-                    showserverinfo
-                    confirm
-                elif [[ "$changeserverdata" == "7" ]]; then
-                    serverregion
-                    clear
-                    showserverinfo
-                    confirm
-                elif [[ "$changeserverdata" == "8" ]]; then
-                    serversubregion
-                    clear
-                    showserverinfo
-                    confirm
-                fi
+                    read -r -p "Select the option for the data you want to change [1,2,3...], Go back [b]:" changeserverdata
+                    if [ -n "$recheckdata" ] && { [ "$recheckdata" = "b" ] || [ "$recheckdata" = "B" ]; }; then
+                        clear
+                        showserverinfo
+                        confirm
+                    elif [[ "$changeserverdata" == "0" ]]; then
+                        fullname
+                        clear
+                        showserverinfo
+                        confirm
+                    elif [[ "$changeserverdata" == "1" ]]; then
+                        serveruser
+                        clear
+                        showserverinfo
+                        confirm
+                    elif [[ "$changeserverdata" == "2" ]]; then
+                        hostaddress
+                        clear
+                        showserverinfo
+                        confirm
+                    elif [[ "$changeserverdata" == "3" ]]; then
+                        port
+                        clear
+                        showserverinfo
+                        confirm
+                    elif [[ "$changeserverdata" == "4" ]]; then
+                        password
+                        clear
+                        showserverinfo
+                        confirm
+                    elif [[ "$changeserverdata" == "5" ]]; then
+                        privatekeyfile
+                        clear
+                        showserverinfo
+                        confirm
+                    elif [[ "$changeserverdata" == "6" ]]; then
+                        servertype
+                        clear
+                        showserverinfo
+                        confirm
+                    elif [[ "$changeserverdata" == "7" ]]; then
+                        serverregion
+                        clear
+                        showserverinfo
+                        confirm
+                    elif [[ "$changeserverdata" == "8" ]]; then
+                        serversubregion
+                        clear
+                        showserverinfo
+                        confirm
+                    fi
+                }
+
+                changeserverinfo
+                
             elif [[ -z "$recheckdata" ]]; then
                 showserverinfo
                 confirm
@@ -716,6 +702,13 @@ newserver() {
 
         confirm
 
+    }
+
+    changeserverinfo () {
+        showserverinfo
+        loading
+        logo
+        mainmenu
     }
 
     checkdata
