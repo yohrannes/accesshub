@@ -305,7 +305,7 @@ connect(){
             if [[ "${selectndname[$i]}" == "sid${servertype[$a]}${dispreg[$opregion]}"* ]]; then
                 if [[ "${selectndname[$i]}" != "$prev_selectndname" ]];then
                     if [[ $opnode == $countshowregions ]]; then
-                        echo "Node selected $countshowregions - ${data[${selectndname[$i]}]} - ${selectndname[$i]}"
+                        # echo "Node selected $countshowregions - ${data[${selectndname[$i]}]} - ${selectndname[$i]}"
                         nodeindexselected="${selectndname[$i]:3}"
                     fi
                     ((countshowregions++))
@@ -317,13 +317,12 @@ connect(){
 
     clear
 
-    # Conetion with specifying private key
-    # sshpass -p 'mypassword' ssh -i ~/.ssh/id_rsa -p 2222 user@example.com
-
     if [ "${data["keyfile$nodeindexselected"]}" == "" ]; then
-        echo sshpass -p ${data["pid$nodeindexselected"]} ssh -p ${data["portid$nodeindexselected"]} ${data["uid$nodeindexselected"]}@${data["hostid$nodeindexselected"]} 2>&1
+        sshpass -p ${data["pid$nodeindexselected"]} ssh -p ${data["portid$nodeindexselected"]} ${data["uid$nodeindexselected"]}@${data["hostid$nodeindexselected"]} 2>&1
+        nodemenu
     else
         ssh -i ${data["keyfile$nodeindexselected"]} ${data["uid$nodeindexselected"]}@${data["hostid$nodeindexselected"]} -p ${data["portid$nodeindexselected"]} 2>&1
+        nodemenu 
     fi
 
     nodemenu
@@ -556,49 +555,63 @@ newserver() {
 
     servertype
 
-    serverregion(){
-        read -r -p "Server region (lower case), Go back [b]: " regionid
-        if [ -n "$regionid" ] && { [ "$regionid" = "b" ] || [ "$regionid" = "B" ]; }; then
-            clear
-            servertype
-        elif [ -z "$regionid" ];then
-            echo "No value detected"
-            sleep 3
-            clear
-            serverregion
-        elif [[ "$regionid" =~ [A-Z] || "$regionid" == *" "* ]]; then
-            echo "Wrong value detected"
-            sleep 3
-            clear
-            serverregion
-        else
-            clear
-        fi
+    location(){
+        serverregion(){
+            read -r -p "Server region (lower case), Go back [b]: " regionid
+            if [ -n "$regionid" ] && { [ "$regionid" = "b" ] || [ "$regionid" = "B" ]; }; then
+                clear
+                servertype
+            elif [ -z "$regionid" ];then
+                echo "No value detected"
+                sleep 3
+                clear
+                serverregion
+            elif [[ "$regionid" =~ [A-Z] || "$regionid" == *" "* ]]; then
+                echo "Wrong value detected"
+                sleep 3
+                clear
+                serverregion
+            else
+                clear
+            fi
+        }
+
+        serverregion
+
+        serversubregion(){
+            read -r -p "Server sub-region (lower case), Go back [b]: " sbregionid
+            if [ -n "$sbregionid" ] && { [ "$sbregionid" = "b" ] || [ "$sbregionid" = "B" ]; }; then
+                clear
+                serverregion
+            elif [[ "$sbregionid" =~ [A-Z] || "$sbregionid" == *" "* ]]; then
+                echo "Wrong value detected"
+                sleep 3
+                clear
+                serversubregion
+            elif [ -z "$sbregionid" ];then
+                echo "No value detected"
+                sleep 3
+                clear
+                serversubregion
+            else
+                clear
+            fi
+        }
+
+        serversubregion
+
     }
 
-    serverregion
+    read -r -p "Whould like to specify the server location? [y]" setlocationop
 
-    serversubregion(){
-        read -r -p "Server sub-region (lower case), Go back [b]: " sbregionid
-        if [ -n "$sbregionid" ] && { [ "$sbregionid" = "b" ] || [ "$sbregionid" = "B" ]; }; then
-            clear
-            serverregion
-        elif [[ "$sbregionid" =~ [A-Z] || "$sbregionid" == *" "* ]]; then
-            echo "Wrong value detected"
-            sleep 3
-            clear
-            serversubregion
-        elif [ -z "$sbregionid" ];then
-            echo "No value detected"
-            sleep 3
-            clear
-            serversubregion
-        else
-            clear
-        fi
-    }
+    if [ -n "$setlocationop" ] && { [ "$setlocationop" = "y" ] || [ "$setlocationop" = "Y" ]; }; then
+        clear
+        location
+    else
+        clear
+    fi
 
-    serversubregion
+    read -r -p
 
     checkdata(){
         showserverinfo(){
@@ -620,64 +633,89 @@ newserver() {
             echo ${serverinfordataops[8]} 'Server sub-region:' $sbregionid
             echo
         }
+
         showserverinfo
-        read -r -p "Confirm? [y], Wrong values [n], Go back [b]: " recheckdata
-        if [ -n "$recheckdata" ] && { [ "$recheckdata" = "b" ] || [ "$recheckdata" = "B" ]; }; then
-            clear
-        elif [[ $recheckdata == [yY] ]]; then
-            clear
-            loading
-        elif [[ $recheckdata == [nN] ]]; then
-            for ((i=0;i<=8;i++)); do
-                ((serverinfordataops[$i]=$i))
-            done
-            clear
-            showserverinfo
+
+        confirm(){
+
             serverinfordataops=''
-            read -r -p "Select the option for the data you want to change [1,2,3...], Go back [b]:" changeserverdata
+            
+            read -r -p "Confirm? [y], Change values [n], Go back [b]: " recheckdata
+
             if [ -n "$recheckdata" ] && { [ "$recheckdata" = "b" ] || [ "$recheckdata" = "B" ]; }; then
                 clear
-                checkdata
-            elif [[ "$changeserverdata" == "0" ]]; then
-                fullname
+                nodemanager
+            elif [[ $recheckdata == [yY] ]]; then
                 clear
-                checkdata
-            elif [[ "$changeserverdata" == "1" ]]; then
-                serveruser
+                loading
+            elif [[ $recheckdata == [nN] ]]; then
+                for ((i=0;i<=8;i++)); do
+                    ((serverinfordataops[$i]="$i"))
+                done
+                showserverinfo
+                read -r -p "Select the option for the data you want to change [1,2,3...], Go back [b]:" changeserverdata
+                if [ -n "$recheckdata" ] && { [ "$recheckdata" = "b" ] || [ "$recheckdata" = "B" ]; }; then
+                    clear
+                    showserverinfo
+                    confirm
+                elif [[ "$changeserverdata" == "0" ]]; then
+                    fullname
+                    clear
+                    showserverinfo
+                    confirm
+                elif [[ "$changeserverdata" == "1" ]]; then
+                    serveruser
+                    clear
+                    showserverinfo
+                    confirm
+                elif [[ "$changeserverdata" == "2" ]]; then
+                    hostaddress
+                    clear
+                    showserverinfo
+                    confirm
+                elif [[ "$changeserverdata" == "3" ]]; then
+                    port
+                    clear
+                    showserverinfo
+                    confirm
+                elif [[ "$changeserverdata" == "4" ]]; then
+                    password
+                    clear
+                    showserverinfo
+                    confirm
+                elif [[ "$changeserverdata" == "5" ]]; then
+                    privatekeyfile
+                    clear
+                    showserverinfo
+                    confirm
+                elif [[ "$changeserverdata" == "6" ]]; then
+                    servertype
+                    clear
+                    showserverinfo
+                    confirm
+                elif [[ "$changeserverdata" == "7" ]]; then
+                    serverregion
+                    clear
+                    showserverinfo
+                    confirm
+                elif [[ "$changeserverdata" == "8" ]]; then
+                    serversubregion
+                    clear
+                    showserverinfo
+                    confirm
+                fi
+            elif [[ -z "$recheckdata" ]]; then
+                showserverinfo
+                confirm
+            else
+                showserverinfo
+                confirm
                 clear
-                checkdata
-            elif [[ "$changeserverdata" == "2" ]]; then
-                hostaddress
-                clear
-                checkdata
-            elif [[ "$changeserverdata" == "3" ]]; then
-                port
-                clear
-                checkdata
-            elif [[ "$changeserverdata" == "4" ]]; then
-                password
-                clear
-                checkdata
-            elif [[ "$changeserverdata" == "5" ]]; then
-                privatekeyfile
-                clear
-                checkdata
-            elif [[ "$changeserverdata" == "6" ]]; then
-                servertype
-                clear
-                checkdata
-            elif [[ "$changeserverdata" == "7" ]]; then
-                serverregion
-                clear
-                checkdata
-            elif [[ "$changeserverdata" == "8" ]]; then
-                serversubregion
-                clear
-                checkdata
             fi
-        else
-            clear
-        fi
+        }
+
+        confirm
+
     }
 
     checkdata
@@ -742,6 +780,8 @@ newserver() {
     }
 
     addnodedata
+    logo
+    mainmenu
 
 }
 
