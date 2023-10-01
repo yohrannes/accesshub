@@ -805,6 +805,18 @@ nodemanager() {
         # echo "servertype[${#servertype[@]}]='$typeid'" >> ./.sourcedata/index/typeid.conf
         
         data["sid$nodeindexselected"]=$sid
+
+        sidonfile="'$sid'"
+        file="./.sourcedata/accessdata.conf"
+        while IFS= read -r linha; do
+        if [[ "$line" == "data[sid$nodeindexselected]=$sidonfile" ]]; then
+            echo "Line found!: $line"
+            echo "Line desired: data[sid"$nodeindexselected"]="$sid
+            read -p "test" test
+            break
+        fi
+        done < "$file"
+
         data["uid$nodeindexselected"]=$uid
         data["hostid$nodeindexselected"]=$hostid
         data["portid$nodeindexselected"]=$portid
@@ -813,6 +825,20 @@ nodemanager() {
         data["typeid$nodeindexselected"]=$typeid
         data["regionid$nodeindexselected"]=$regionid
         data["sbregionid$nodeindexselected"]=$sbregionid
+
+        echo "data[sid"$nodeindexselected"]="$sid
+        echo "data[uid"$nodeindexselected"]="$uid
+        echo "data[hostid"$nodeindexselected"]="$hostid
+        echo "data[portid"$nodeindexselected"]="$portid
+        echo "data[pid"$nodeindexselected"]="$pid
+        echo "data[keyfile"$nodeindexselected"]="$keyfile
+        echo "data[typeid"$nodeindexselected"]="$typeid
+        echo "data[regionid"$nodeindexselected"]="$regionid
+        echo "data[sbregionid"$nodeindexselected"]="$sbregionid
+
+        read -p 'test' test
+
+        addnodedata
 
     ;;
     b) clear; logo; mainmenu;;
