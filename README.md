@@ -9,7 +9,6 @@
 * All with easy usability and security.
 
 ## Requirements
-- [x] sshpass installed.
 - [x] allow permission to access from ssh password or private key on the others servers.
 
 ## How to use
