@@ -13,5 +13,9 @@
 - [ ] Sshpass installed on server
 
 ## How to use
-...
+
+### 1 - Run the accesshub bash file.
+```
+./accesshub.sh
+```
 
