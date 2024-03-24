@@ -9,7 +9,8 @@
 * All with easy usability and security.
 
 ## Requirements
-- [x] allow permission to access from ssh password or private key on the others servers.
+- [ ] Allowed permissions to access from ssh password or private key on the others servers. Add on ssh_config file "PasswordAuthentication yes".
+- [ ] Sshpass installed on server
 
 ## How to use
 ...
