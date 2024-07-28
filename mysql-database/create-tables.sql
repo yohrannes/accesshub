@@ -1,6 +1,6 @@
 create database db_phosts; -- Phisical hosts
 use db_phosts;
-drop database db_phosts;
+-- drop database db_phosts;
 -- drop table phosts_region_a;
 CREATE TABLE phosts_region_a (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
